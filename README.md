@@ -4,6 +4,9 @@
 
 ### This is a simple food delivery application created with the intention of applying my knowledge about microservices architecture
 
+#### Starting MySQL DB
+
+`$ docker run --name root -e MYSQL_DATABASE=auth -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:5.7`
 
 #### System Requirements by Example
 
