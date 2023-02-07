@@ -23,6 +23,17 @@ services:
       - .m2:/root/.m2
     stdin_open: true
     tty: true
+  gateway:
+    depends_on:
+      - auth
+    build: ./micro-gateway
+    env_file: ./.env
+    ports:
+      - 8080:8080
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
 
 volumes:
   db:
