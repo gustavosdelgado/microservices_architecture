@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+  auth:
+    depends_on:
+      - mysqldb
+    build: ./micro-authentication
+    env_file: ./.env
+    ports:
+      - 9000:9000
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
