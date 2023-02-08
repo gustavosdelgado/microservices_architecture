@@ -18,5 +18,5 @@ RUN ./mvnw package
 
 FROM eclipse-temurin:17-jre-jammy as production
 EXPOSE 8080
-COPY --from=build /app/target/micro-gateway-*.jar /app.jar
+COPY --from=build /app/target/microgateway-*.jar /app.jar
 CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
