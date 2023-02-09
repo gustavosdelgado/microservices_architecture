@@ -1,5 +1,6 @@
 package io.github.gustavosdelgado.microrestaurant.controller;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,9 +14,6 @@ public class RestaurantController {
 
     @GetMapping("/restaurant")
     public Mono<String> getQuote() {
-        // if (auth.getAuthorities().contains(GOLD_CUSTOMER)) {
-        // return Mono.just("AUTHORIZED");
-        // }
         return Mono.just("UNAUTHORIZED");
     }
 

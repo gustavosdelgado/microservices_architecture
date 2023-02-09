@@ -8,14 +8,14 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - MYSQL_DATABASE=$MYSQLDB_DATABASE
-    ports:
-      - 3306:3306
     volumes:
       - db:/var/lib/mysql
   auth:
     depends_on:
       - mysqldb
-    build: ./micro-authentication
+    build: 
+      context: ./micro-auhentication
+      target: development
     env_file: ./.env
     ports:
       - 9000:9000
@@ -26,10 +26,24 @@ services:
   gateway:
     depends_on:
       - auth
-    build: ./micro-gateway
+      - restaurant
+    build: 
+      context: ./micro-gateway
+      target: development
     env_file: ./.env
     ports:
       - 8080:8080
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+  restaurant:
+    depends_on:
+      - auth
+    build: 
+      context: ./micro-restaurant
+      target: development
+    env_file: ./.env
     volumes:
       - .m2:/root/.m2
     stdin_open: true

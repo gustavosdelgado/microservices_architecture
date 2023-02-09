@@ -5,13 +5,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties
 class UriConfiguration {
 
-    private String httpbin = "http://localhost:9000";
+    private String restaurantUri = "http://restaurant:8081";
 
-    public String getHttpbin() {
-        return httpbin;
+    public String getRestaurantUri() {
+        return restaurantUri;
     }
 
-    public void setHttpbin(String httpbin) {
-        this.httpbin = httpbin;
+    public void setRestaurantUri(String restaurantUri) {
+        this.restaurantUri = restaurantUri;
     }
 }
