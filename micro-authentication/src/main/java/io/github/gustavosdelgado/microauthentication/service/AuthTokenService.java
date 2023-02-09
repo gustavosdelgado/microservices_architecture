@@ -15,7 +15,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import io.github.gustavosdelgado.microauthentication.domain.user.User;
 
 @Service
-public class TokenService {
+public class AuthTokenService {
 
     @Value("${api.security.token.secret}")
     private String secret;
@@ -23,14 +23,14 @@ public class TokenService {
     @Value("${api.security.token.expiration}")
     private int expirationInMinutes;
 
-    public String gerarToken(User usuario, String role) {
+    public String gerarToken(User user) {
         try {
             var algoritmo = Algorithm.HMAC512(secret);
             return JWT.create()
                     .withIssuer("AuthService")
-                    .withSubject(usuario.getLogin())
+                    .withSubject(user.getLogin())
                     .withExpiresAt(dataExpiracao())
-                    .withClaim("role", role)
+                    .withClaim("role", user.getRole().name())
                     .sign(algoritmo);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error creating token", exception);

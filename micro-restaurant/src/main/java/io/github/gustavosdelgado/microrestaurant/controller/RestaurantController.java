@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.interfaces.Claim;
 
-import io.github.gustavosdelgado.microrestaurant.service.TokenService;
+import io.github.gustavosdelgado.microrestaurant.service.RestaurantTokenService;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -21,11 +21,11 @@ public class RestaurantController {
     private static final String RESTAURANT_ROLE = "ROLE_RESTAURANT";
 
     @Autowired
-    private TokenService tokenService;
+    private RestaurantTokenService tokenService;
 
     @GetMapping("/restaurant")
     public Mono<String> getQuote(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken) {
-        Claim claim = tokenService.getSubject(authorizationToken);
+        Claim claim = tokenService.getRole(authorizationToken);
 
         if (!RESTAURANT_ROLE.equals(claim.asString())) {
             return Mono.just("UNAUTHORIZED");

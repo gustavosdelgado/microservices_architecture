@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
 import io.github.gustavosdelgado.microauthentication.domain.user.JwtData;
 import io.github.gustavosdelgado.microauthentication.domain.user.User;
-import io.github.gustavosdelgado.microauthentication.service.TokenService;
+import io.github.gustavosdelgado.microauthentication.service.AuthTokenService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -24,7 +24,7 @@ public class AuthenticationController {
     private AuthenticationManager manager;
 
     @Autowired
-    private TokenService tokenService;
+    private AuthTokenService tokenService;
 
     @PostMapping("/authenticate")
     public ResponseEntity<JwtData> authenticate(@RequestBody @Valid AuthenticationRequest request) {
@@ -35,7 +35,7 @@ public class AuthenticationController {
             var token = new UsernamePasswordAuthenticationToken(request.login(), request.password());
             var authentication = manager.authenticate(token);
     
-            var jwt = tokenService.gerarToken((User) authentication.getPrincipal(), "ROLE_RESTAURANT");
+            var jwt = tokenService.gerarToken((User) authentication.getPrincipal());
     
             return ResponseEntity.ok(new JwtData(jwt));
         } catch (Exception e) {

@@ -14,17 +14,17 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 
 @Service
-public class TokenService {
+public class RestaurantTokenService {
 
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public Claim getSubject(String tokenJWT) {
+    public Claim getRole(String tokenJWT) {
         try {
             tokenJWT = tokenJWT.replace("Bearer ", "");
             var algoritmo = Algorithm.HMAC512(secret);
             BaseVerification verification = (BaseVerification) JWT.require(algoritmo)
-                .withIssuer("AuthService");
+                    .withIssuer("AuthService");
             JWTVerifier verifier = verification.build(Clock.systemUTC());
             return verifier.verify(tokenJWT).getClaim("role");
         } catch (JWTVerificationException exception) {
