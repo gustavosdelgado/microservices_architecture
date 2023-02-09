@@ -32,4 +32,18 @@ public class RestaurantTokenService {
             return null;
         }
     }
+
+    public String getUser(String tokenJWT) {
+        try {
+            tokenJWT = tokenJWT.replace("Bearer ", "");
+            var algoritmo = Algorithm.HMAC512(secret);
+            BaseVerification verification = (BaseVerification) JWT.require(algoritmo)
+                    .withIssuer("AuthService");
+            JWTVerifier verifier = verification.build(Clock.systemUTC());
+            return verifier.verify(tokenJWT).getSubject();
+        } catch (JWTVerificationException exception) {
+            LoggerFactory.getLogger(getClass()).error("Fail to verify token: ", exception);
+            return null;
+        }
+    }
 }
