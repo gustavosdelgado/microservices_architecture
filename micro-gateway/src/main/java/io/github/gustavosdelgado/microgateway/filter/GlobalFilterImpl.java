@@ -1,12 +1,31 @@
 package io.github.gustavosdelgado.microgateway.filter;
 
+import java.time.Clock;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.JWTVerifier.BaseVerification;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.AlgorithmMismatchException;
+import com.auth0.jwt.impl.ExpectedCheckHolder;
+import com.auth0.jwt.impl.JWTParser;
+import com.auth0.jwt.interfaces.Verification;
 
 import reactor.core.publisher.Mono;
 
@@ -15,9 +34,36 @@ public class GlobalFilterImpl implements GlobalFilter, Ordered {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Value("${api.security.token.secret}")
+    private String secret;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange,
             GatewayFilterChain chain) {
+        var headers = exchange.getRequest().getHeaders();
+
+        if (!headers.containsKey("Authorization")) {
+            logger.info("Authorization header absent.");
+            ServerHttpResponse response = exchange.getResponse();
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            return response.setComplete();
+        }
+        
+        var authorization = headers.get("Authorization").get(0);
+        var token = authorization.replace("Bearer ", "");
+
+        try {
+            BaseVerification verification = (BaseVerification) JWT.require(Algorithm.HMAC512(secret))
+                .withIssuer("AuthService");
+            JWTVerifier verifier = verification.build(Clock.systemUTC());
+            verifier.verify(token);
+        } catch (Exception e) {
+            logger.info("Invalid authentication token.", e);
+            ServerHttpResponse response = exchange.getResponse();
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            return response.setComplete();
+        }
+
         logger.info("Global Pre Filter executed");
         return chain.filter(exchange)
                 .then(Mono.fromRunnable(() -> {

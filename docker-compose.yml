@@ -14,11 +14,12 @@ services:
     depends_on:
       - mysqldb
     build: 
-      context: ./micro-auhentication
+      context: ./micro-authentication
       target: development
     env_file: ./.env
     ports:
       - 9000:9000
+      - 8000:8000
     volumes:
       - .m2:/root/.m2
     stdin_open: true
@@ -33,6 +34,7 @@ services:
     env_file: ./.env
     ports:
       - 8080:8080
+      - 7070:7070
     volumes:
       - .m2:/root/.m2
     stdin_open: true
@@ -44,6 +46,9 @@ services:
       context: ./micro-restaurant
       target: development
     env_file: ./.env
+    ports:
+      - 8081:8081
+      - 8082:8082
     volumes:
       - .m2:/root/.m2
     stdin_open: true
