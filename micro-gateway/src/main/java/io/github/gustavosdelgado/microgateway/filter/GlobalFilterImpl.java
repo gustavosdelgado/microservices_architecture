@@ -1,11 +1,6 @@
 package io.github.gustavosdelgado.microgateway.filter;
 
 import java.time.Clock;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +17,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifier.BaseVerification;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.AlgorithmMismatchException;
-import com.auth0.jwt.impl.ExpectedCheckHolder;
-import com.auth0.jwt.impl.JWTParser;
-import com.auth0.jwt.interfaces.Verification;
 
 import reactor.core.publisher.Mono;
 

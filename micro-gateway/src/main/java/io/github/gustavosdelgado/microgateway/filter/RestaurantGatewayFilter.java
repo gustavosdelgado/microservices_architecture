@@ -20,9 +20,8 @@ public class RestaurantGatewayFilter implements GatewayFilter, Ordered {
             GatewayFilterChain chain) {
         logger.info("RestaurantGateway Pre Filter executed");
         return chain.filter(exchange)
-                .then(Mono.fromRunnable(() -> {
-                    logger.info("RestaurantGateway Post Filter executed");
-                }));
+                .then(Mono.fromRunnable(
+                    () -> logger.info("RestaurantGateway Post Filter executed")));
     }
 
     @Override
