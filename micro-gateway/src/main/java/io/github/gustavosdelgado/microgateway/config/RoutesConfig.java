@@ -18,7 +18,7 @@ public class RoutesConfig {
                 .route(p -> p
                         .path("/restaurant")
                         .filters(f -> f.filter(new RestaurantGatewayFilter()))
-                        .uri(uriConfiguration.getRestaurantUri() + "/restaurant"))
+                        .uri(uriConfiguration.getRestaurantUri()))
                 .build();
     }
 

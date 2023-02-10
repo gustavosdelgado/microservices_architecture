@@ -1,7 +1,5 @@
 package io.github.gustavosdelgado.microrestaurant.controller;
 
-import javax.websocket.server.PathParam;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.interfaces.Claim;
@@ -25,7 +22,6 @@ import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRep
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRequest;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantResponse;
 import io.github.gustavosdelgado.microrestaurant.service.RestaurantTokenService;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -56,7 +52,7 @@ public class RestaurantController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponse> get(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
-            @RequestParam String id) {
+            @PathVariable String id) {
         if (!isAuthorized(authorizationToken)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
