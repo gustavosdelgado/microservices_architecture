@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.interfaces.Claim;
 
-import io.github.gustavosdelgado.microrestaurant.domain.restaurant.Restaurant;
-import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRepository;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRequest;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantResponse;
+import io.github.gustavosdelgado.microrestaurant.exception.NoDataFoundException;
+import io.github.gustavosdelgado.microrestaurant.exception.UnauthorizedException;
+import io.github.gustavosdelgado.microrestaurant.service.RestaurantService;
 import io.github.gustavosdelgado.microrestaurant.service.RestaurantTokenService;
 
 @RestController
@@ -35,37 +36,52 @@ public class RestaurantController {
     private RestaurantTokenService tokenService;
 
     @Autowired
-    private RestaurantRepository restaurantRepository;
+    private RestaurantService restaurantService;
 
     @PostMapping
     public ResponseEntity<String> create(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
             @Validated @RequestBody RestaurantRequest request) {
-        if (!isAuthorized(authorizationToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        try {
+            if (!isAuthorized(authorizationToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            restaurantService.create(request, tokenService.getUser(authorizationToken));
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+
+        } catch (Exception e) {
+            logger.error("Fail to create Restaurant Entity", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
-        Restaurant restaurant = new Restaurant(request.getName(), tokenService.getUser(authorizationToken));
-        restaurantRepository.save(restaurant);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponse> get(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
-            @PathVariable String id) {
-        if (!isAuthorized(authorizationToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+            @PathVariable Long id) {
+        try {
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+            if (!isAuthorized(authorizationToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            RestaurantResponse response = restaurantService.get(id, tokenService.getUser(authorizationToken));
+            return ResponseEntity.ok(response);
+
+        } catch (NoDataFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        } catch (Exception e) {
+            logger.error("Fail to get Restaurant Entity", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     private boolean isAuthorized(String token) {
         Claim claim = tokenService.getRole(token);
-        if (!RESTAURANT_ROLE.equals(claim.asString())) {
-            return false;
-        }
-        return true;
+        return RESTAURANT_ROLE.equals(claim.asString());
     }
 
 }
