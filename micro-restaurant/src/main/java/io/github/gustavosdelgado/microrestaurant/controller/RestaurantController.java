@@ -19,6 +19,7 @@ import com.auth0.jwt.interfaces.Claim;
 
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRequest;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantResponse;
+import io.github.gustavosdelgado.microrestaurant.exception.BadRequestException;
 import io.github.gustavosdelgado.microrestaurant.exception.NoDataFoundException;
 import io.github.gustavosdelgado.microrestaurant.exception.UnauthorizedException;
 import io.github.gustavosdelgado.microrestaurant.service.RestaurantService;
@@ -48,6 +49,10 @@ public class RestaurantController {
 
             restaurantService.create(request, tokenService.getUser(authorizationToken));
             return ResponseEntity.status(HttpStatus.CREATED).build();
+
+        } catch (BadRequestException e) {
+            logger.error("Fail to create Restaurant Entity", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         } catch (Exception e) {
             logger.error("Fail to create Restaurant Entity", e);
