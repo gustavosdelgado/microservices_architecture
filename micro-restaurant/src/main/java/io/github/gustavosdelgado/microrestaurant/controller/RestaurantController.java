@@ -62,8 +62,10 @@ public class RestaurantController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponse> get(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
-            @PathVariable Long id) {
+            @RequestHeader("X-Request-ID") String requestId, @PathVariable Long id) {
         try {
+
+            logger.info("RequestID encaminhado: {}", requestId);
 
             if (!isAuthorized(authorizationToken)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
