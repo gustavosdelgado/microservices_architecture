@@ -15,10 +15,14 @@ public class RoutesConfig {
     @Bean
     public RouteLocator myRoutes(RouteLocatorBuilder builder, UriConfiguration uriConfiguration) {
         return builder.routes()
-                .route(p -> p
-                        .path("/restaurant")
-                        .filters(f -> f.filter(new RestaurantGatewayFilter()))
-                        .uri(uriConfiguration.getRestaurantUri()))
+				.route("restaurant_command", p -> p
+						.path("/restaurant/**")
+						.filters(f -> f.rewritePath("/restaurant/(?<segment>.*)", "/restaurant/${segment}"))
+						.uri(uriConfiguration.getRestaurantUri()))
+				.route("restaurant_query", p -> p
+						.path("/restaurant")
+						.filters(f -> f.filter(new RestaurantGatewayFilter()))
+						.uri(uriConfiguration.getRestaurantUri()))
                 .build();
     }
 
