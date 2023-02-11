@@ -38,9 +38,13 @@ public class AuthenticationController {
             var jwt = tokenService.gerarToken((User) authentication.getPrincipal());
     
             return ResponseEntity.ok(new JwtData(jwt));
+        } catch (RuntimeException e) {
+            logger.error("Authentication failure: ", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
         } catch (Exception e) {
             logger.error("Authentication failure: ", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
