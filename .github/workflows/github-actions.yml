@@ -1,16 +1,18 @@
-name: github-actions
+name: build
 run-name: docker-ci
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Build projects:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker-practice/actions-setup-docker@master
-        timeout-minutes: 12
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: Initialize containers
-        run: |
-            set -x
-
-            docker compose up
+        - uses: actions/checkout@v3
+        - uses: actions/setup-java@v3
+        with:
+            distribution: 'temurin'
+            java-version: '17'
+            cache: 'maven'
+        - name: Build with Maven
+        run: |  
+            mvn install -f ./micro-authentication/pom.xml
+            mvn install -f ./micro-gateway/pom.xml
+            mvn install -f ./micro-restaurant/pom.xml
