@@ -13,6 +13,4 @@ jobs:
         run: |
             set -x
 
-            docker version
-
-            docker run --rm hello-world
+            docker compose up
