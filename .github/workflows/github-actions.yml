@@ -1,4 +1,4 @@
-name: build
+name: Build and Test
 run-name: docker-ci
 on: [push]
 jobs:
@@ -12,8 +12,8 @@ jobs:
             distribution: 'temurin'
             java-version: '17'
             cache: 'maven'
-        - name: Build with Maven
+        - name: Tests verification
           run: |  
-            mvn install -f ./micro-authentication/pom.xml
-            mvn install -f ./micro-gateway/pom.xml
-            mvn install -f ./micro-restaurant/pom.xml
+            mvn surefire:test failsafe:integration-test -f ./micro-authentication/pom.xml
+            mvn surefire:test failsafe:integration-test -f ./micro-gateway/pom.xml
+            mvn surefire:test failsafe:integration-test -f ./micro-restaurant/pom.xml
