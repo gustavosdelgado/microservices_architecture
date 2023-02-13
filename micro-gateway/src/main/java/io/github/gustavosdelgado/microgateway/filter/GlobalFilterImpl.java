@@ -69,9 +69,7 @@ public class GlobalFilterImpl implements GlobalFilter, Ordered {
     }
 
     private void addRequestId(ServerWebExchange exchange) {
-        if (!exchange.getRequest().getHeaders().containsValue("X-Request-ID")) {
-            exchange.getRequest().mutate().header("X-Request-ID", UUID.randomUUID().toString());
-        }
+        exchange.getRequest().mutate().header("X-Request-ID", UUID.randomUUID().toString());
     }
 
     @Override
