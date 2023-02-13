@@ -19,6 +19,15 @@ services:
       - MYSQLDB_DATABASE=$MYSQLDB_RESTAURANT_DATABASE
     volumes:
       - db-restaurant:/var/lib/mysql
+  mysqldb-order:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQLDB_DATABASE=$MYSQLDB_ORDER_DATABASE
+    volumes:
+      - db-order:/var/lib/mysql
   auth:
     depends_on:
       - mysqldb-auth
@@ -38,6 +47,7 @@ services:
     depends_on:
       - auth
       - restaurant
+      - order
     build: 
       context: ./micro-gateway
       target: development
@@ -53,7 +63,6 @@ services:
   restaurant:
     depends_on:
       - mysqldb-restaurant
-      - auth
     build: 
       context: ./micro-restaurant
       target: development
@@ -66,7 +75,23 @@ services:
       - ./logs:/root/logs
     stdin_open: true
     tty: true
+  order:
+    depends_on:
+      - mysqldb-order
+    build: 
+      context: ./micro-order
+      target: development
+    env_file: ./.env
+    ports:
+      - 8181:8181
+      - 8182:8182
+    volumes:
+      - .m2:/root/.m2
+      - ./logs:/root/logs
+    stdin_open: true
+    tty: true
 
 volumes:
   db-auth:
   db-restaurant:
+  db-order:
