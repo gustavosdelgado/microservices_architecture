@@ -12,7 +12,6 @@ import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantReq
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantResponse;
 import io.github.gustavosdelgado.microrestaurant.exception.BadRequestException;
 import io.github.gustavosdelgado.microrestaurant.exception.NoDataFoundException;
-import io.github.gustavosdelgado.microrestaurant.exception.UnauthorizedException;
 
 @Service
 public class RestaurantService {
@@ -31,17 +30,13 @@ public class RestaurantService {
         }
     }
 
-    public RestaurantResponse get(Long id, String user) throws NoDataFoundException, UnauthorizedException {
-        Optional<Restaurant> rOptional = restaurantRepository.findById(id);
+    public RestaurantResponse get(Long id, String user) throws NoDataFoundException {
+        Optional<Restaurant> rOptional = restaurantRepository.findbyIdAndUser(id, user);
         if (!rOptional.isPresent()) {
             throw new NoDataFoundException("Restaurant not found");
         }
 
         Restaurant restaurant = rOptional.get();
-
-        if (!restaurant.getUser().equals(user)) {
-            throw new UnauthorizedException("User not related to the restaurant");
-        }
 
         return new RestaurantResponse(restaurant.getName());
     }
