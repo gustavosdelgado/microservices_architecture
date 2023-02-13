@@ -31,7 +31,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(new JwtData(jwt));
         } catch (RuntimeException e) {
             logger.error("Authentication failure: ", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         } catch (Exception e) {
             logger.error("Authentication failure: ", e);

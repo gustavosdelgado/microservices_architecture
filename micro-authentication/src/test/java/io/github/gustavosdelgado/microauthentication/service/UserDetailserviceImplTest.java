@@ -1,6 +1,8 @@
 package io.github.gustavosdelgado.microauthentication.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,10 @@ public class UserDetailserviceImplTest {
         when(mockUserRepository.findByLogin(validUsername)).thenReturn(user);
 
         assertEquals(user, service.loadUserByUsername(validUsername), "not expected user");
+
+        verify(mockUserRepository).findByLogin(validUsername);
+
+        verifyNoMoreInteractions(mockUserRepository);
     }
 
 }

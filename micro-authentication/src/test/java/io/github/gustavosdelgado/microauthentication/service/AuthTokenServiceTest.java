@@ -23,7 +23,7 @@ public class AuthTokenServiceTest {
         User user = new User(1L, "login", "password", Role.ROLE_CONSUMER);
         ReflectionTestUtils.setField(service, "secret", "secret");
         ReflectionTestUtils.setField(service, "expirationInMinutes", 15);
-        assertNotNull(service.gerarToken(user));
+        assertNotNull(service.gerarToken(user), "Unexpected null return");
     }
 
     @Test

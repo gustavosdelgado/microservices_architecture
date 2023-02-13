@@ -1,5 +1,7 @@
 package io.github.gustavosdelgado.microauthentication.domain.user;
 
-public record AuthenticationRequest(String login, String password) {
+import jakarta.validation.constraints.NotNull;
+
+public record AuthenticationRequest(@NotNull String login, @NotNull String password) {
 
 }

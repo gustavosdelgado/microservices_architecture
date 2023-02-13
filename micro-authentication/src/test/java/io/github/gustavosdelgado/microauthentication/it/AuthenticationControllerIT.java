@@ -1,6 +1,7 @@
 package io.github.gustavosdelgado.microauthentication.it;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +30,7 @@ public class AuthenticationControllerIT {
                 new AuthenticationRequest("gustavosd", "123456"), String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.hasBody());
     }
 
     @Test
@@ -36,7 +38,7 @@ public class AuthenticationControllerIT {
         ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
                 new AuthenticationRequest("gustavosd", "invalidPassword"), String.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test
@@ -44,7 +46,7 @@ public class AuthenticationControllerIT {
         ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
                 new AuthenticationRequest("invalidUsername", "invalidPassword"), String.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test

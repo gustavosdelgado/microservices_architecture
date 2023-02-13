@@ -33,7 +33,7 @@ public class AuthenticationServiceTest {
         UsernamePasswordAuthenticationToken passwordToken = new UsernamePasswordAuthenticationToken(request, request);
         doReturn(passwordToken).when(service).createUsernamePasswordAuthToken(request);
         doReturn("jwt").when(service).generateJwt(passwordToken);
-        assertEquals("jwt", service.generateToken(request));
+        assertEquals("jwt", service.generateToken(request), "not expected return");
     }
 
 }

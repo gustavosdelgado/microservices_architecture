@@ -29,11 +29,6 @@ public class AuthenticationService {
 
     protected String generateJwt(UsernamePasswordAuthenticationToken token) {
         Authentication auth = manager.authenticate(token);
-
-        if (auth == null) {
-            throw new RuntimeException("Invalid user/password");
-        }
-
         return tokenService.gerarToken((User) auth.getPrincipal());
     }
 
