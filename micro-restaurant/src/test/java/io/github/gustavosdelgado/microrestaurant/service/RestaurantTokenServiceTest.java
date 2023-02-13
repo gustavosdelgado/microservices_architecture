@@ -38,6 +38,51 @@ public class RestaurantTokenServiceTest {
     }
 
     @Test
+    void givenValidTokenWithDifferentClaimWhenGetRoleThenFails() {
+        service = new RestaurantTokenService();
+        ReflectionTestUtils.setField(service, SECRET, SECRET);
+
+        String token = JWT.create()
+                .withIssuer("AuthService")
+                .withSubject(LOGIN)
+                .withExpiresAt(Instant.now().plusSeconds(60))
+                .withClaim("differentClaim", ROLE)
+                .sign(Algorithm.HMAC512(SECRET));
+
+        assertNull(service.getRole("Bearer " + token), "unexpected role");
+    }
+
+    @Test
+    void givenValidTokenWithDifferentSecretWhenGetRoleThenFails() {
+        service = new RestaurantTokenService();
+        ReflectionTestUtils.setField(service, SECRET, SECRET);
+
+        String token = JWT.create()
+                .withIssuer("AuthService")
+                .withSubject(LOGIN)
+                .withExpiresAt(Instant.now().plusSeconds(60))
+                .withClaim(ROLE, ROLE)
+                .sign(Algorithm.HMAC512("differentSecret"));
+
+        assertNull(service.getRole("Bearer " + token), "unexpected role");
+    }
+
+    @Test
+    void givenValidTokenWithDifferentIssuerWhenGetRoleThenFails() {
+        service = new RestaurantTokenService();
+        ReflectionTestUtils.setField(service, SECRET, SECRET);
+
+        String token = JWT.create()
+                .withIssuer("differentIssuer")
+                .withSubject(LOGIN)
+                .withExpiresAt(Instant.now().plusSeconds(60))
+                .withClaim(ROLE, ROLE)
+                .sign(Algorithm.HMAC512(SECRET));
+
+        assertNull(service.getRole("Bearer " + token), "unexpected role");
+    }
+
+    @Test
     void givenTokenWithNoBearerWhenGetRoleThenSucceeds() {
         service = new RestaurantTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
@@ -73,6 +118,36 @@ public class RestaurantTokenServiceTest {
                 .sign(Algorithm.HMAC512(SECRET));
 
         assertEquals(LOGIN, service.getUser("Bearer " + token), "unexpected user");
+    }
+
+    @Test
+    void givenValidTokenWithDifferentSecretWhenGetUserThenFails() {
+        service = new RestaurantTokenService();
+        ReflectionTestUtils.setField(service, SECRET, SECRET);
+
+        String token = JWT.create()
+                .withIssuer("AuthService")
+                .withSubject(LOGIN)
+                .withExpiresAt(Instant.now().plusSeconds(60))
+                .withClaim(ROLE, ROLE)
+                .sign(Algorithm.HMAC512("differentSecret"));
+
+        assertNull(service.getUser("Bearer " + token), "unexpected role");
+    }
+
+    @Test
+    void givenValidTokenWithDifferentIssuerWhenGetUserThenFails() {
+        service = new RestaurantTokenService();
+        ReflectionTestUtils.setField(service, SECRET, SECRET);
+
+        String token = JWT.create()
+                .withIssuer("differentIssuer")
+                .withSubject(LOGIN)
+                .withExpiresAt(Instant.now().plusSeconds(60))
+                .withClaim(ROLE, ROLE)
+                .sign(Algorithm.HMAC512(SECRET));
+
+        assertNull(service.getUser("Bearer " + token), "unexpected user");
     }
 
     @Test
