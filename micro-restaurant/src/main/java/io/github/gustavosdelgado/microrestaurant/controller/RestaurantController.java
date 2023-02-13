@@ -21,6 +21,7 @@ import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantReq
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantResponse;
 import io.github.gustavosdelgado.microrestaurant.exception.BadRequestException;
 import io.github.gustavosdelgado.microrestaurant.exception.NoDataFoundException;
+import io.github.gustavosdelgado.microrestaurant.exception.UnauthorizedException;
 import io.github.gustavosdelgado.microrestaurant.service.RestaurantService;
 import io.github.gustavosdelgado.microrestaurant.service.RestaurantTokenService;
 
@@ -74,7 +75,10 @@ public class RestaurantController {
             return ResponseEntity.ok(response);
 
         } catch (NoDataFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         } catch (Exception e) {
             logger.error("Fail to get Restaurant Entity", e);
