@@ -11,7 +11,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifier.BaseVerification;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 @Service
 public class RestaurantTokenService {
@@ -19,14 +19,9 @@ public class RestaurantTokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public Claim getRole(String tokenJWT) {
+    public String getRole(String tokenJWT) {
         try {
-            tokenJWT = tokenJWT.replace("Bearer ", "");
-            var algoritmo = Algorithm.HMAC512(secret);
-            BaseVerification verification = (BaseVerification) JWT.require(algoritmo)
-                    .withIssuer("AuthService");
-            JWTVerifier verifier = verification.build(Clock.systemUTC());
-            return verifier.verify(tokenJWT).getClaim("role");
+            return decodeJwt(tokenJWT).getClaim("role").asString();
         } catch (JWTVerificationException exception) {
             LoggerFactory.getLogger(getClass()).error("Fail to verify token: ", exception);
             return null;
@@ -35,15 +30,22 @@ public class RestaurantTokenService {
 
     public String getUser(String tokenJWT) {
         try {
-            tokenJWT = tokenJWT.replace("Bearer ", "");
-            var algoritmo = Algorithm.HMAC512(secret);
-            BaseVerification verification = (BaseVerification) JWT.require(algoritmo)
-                    .withIssuer("AuthService");
-            JWTVerifier verifier = verification.build(Clock.systemUTC());
-            return verifier.verify(tokenJWT).getSubject();
+            return decodeJwt(tokenJWT).getSubject();
         } catch (JWTVerificationException exception) {
             LoggerFactory.getLogger(getClass()).error("Fail to verify token: ", exception);
             return null;
         }
+    }
+
+    private DecodedJWT decodeJwt(String tokenJWT) {
+        if (tokenJWT == null) {
+            throw new JWTVerificationException("Null token");
+        }
+        tokenJWT = tokenJWT.replace("Bearer ", "");
+        var algoritmo = Algorithm.HMAC512(secret);
+        BaseVerification verification = (BaseVerification) JWT.require(algoritmo)
+                .withIssuer("AuthService");
+        JWTVerifier verifier = verification.build(Clock.systemUTC());
+        return verifier.verify(tokenJWT);
     }
 }

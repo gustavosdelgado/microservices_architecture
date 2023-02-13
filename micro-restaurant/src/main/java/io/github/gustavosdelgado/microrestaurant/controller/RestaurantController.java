@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.auth0.jwt.interfaces.Claim;
-
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRequest;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantResponse;
 import io.github.gustavosdelgado.microrestaurant.exception.BadRequestException;
@@ -87,8 +85,8 @@ public class RestaurantController {
     }
 
     private boolean isAuthorized(String token) {
-        Claim claim = tokenService.getRole(token);
-        return RESTAURANT_ROLE.equals(claim.asString());
+        String role = tokenService.getRole(token);
+        return RESTAURANT_ROLE.equals(role);
     }
 
 }
