@@ -1,4 +1,4 @@
-[![build](https://github.com/gustavosdelgado/microservices_architecture/actions/workflows/github-actions.yml/badge.svg)](https://github.com/gustavosdelgado/microservices_architecture/actions/workflows/github-actions.yml)
+[![build and tests](https://github.com/gustavosdelgado/microservices_architecture/actions/workflows/github-actions.yml/badge.svg)](https://github.com/gustavosdelgado/microservices_architecture/actions/workflows/github-actions.yml)
 
 # Microservices Architecture Project
 
