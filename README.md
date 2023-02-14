@@ -18,17 +18,20 @@
 
 ## 3. Documentation
 
-## 3.1 Stack used:
+## 3.1 Diagram
+
+![Architecture Diagram](./doc/img/microservice_architecture.png "Diagram")
+
+## 3.2 Stack used:
 
  - OpenJDK 17;
- - Spring Cloud Gateway;
- - Spring Boot;
+ - Spring Gateway;
  - Spring Security
- - Spring Web;
  - Spring Webflux;
+ - RabbitMQ
  - MySQL 5.7;
 
-## 3.2 System Requirements by Example
+## 3.3 System Requirements by Example
 
 ### Feature: User creates an account
     Scenario: User tries to create an account
