@@ -23,6 +23,9 @@ public class RoutesConfig {
 						.path("/restaurant")
 						.filters(f -> f.filter(new RestaurantGatewayFilter()))
 						.uri(uriConfiguration.getRestaurantUri()))
+				.route("order_query", p -> p
+						.path("/order")
+						.uri(uriConfiguration.getOrderUri()))
                 .build();
     }
 

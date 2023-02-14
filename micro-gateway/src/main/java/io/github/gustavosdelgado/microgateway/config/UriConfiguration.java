@@ -7,11 +7,14 @@ class UriConfiguration {
 
     private String restaurantUri = "http://restaurant:8081";
 
+    private String orderUri = "http://order:8181";
+
     public String getRestaurantUri() {
         return restaurantUri;
     }
 
-    public void setRestaurantUri(String restaurantUri) {
-        this.restaurantUri = restaurantUri;
+    public String getOrderUri() {
+        return orderUri;
     }
+
 }
