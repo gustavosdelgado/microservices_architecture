@@ -6,6 +6,7 @@ target/
 .m2/**
 logs/**
 **/*.log
+dados/**
 
 ### STS ###
 .apt_generated
