@@ -22,7 +22,7 @@ public class RestaurantService {
 
     public void create(RestaurantRequest request, String user) throws BadRequestException {
         try {
-            Restaurant restaurant = new Restaurant(request.getName(), user);
+            Restaurant restaurant = new Restaurant(request.name(), user);
             restaurantRepository.save(restaurant);
 
         } catch (DataIntegrityViolationException e) {

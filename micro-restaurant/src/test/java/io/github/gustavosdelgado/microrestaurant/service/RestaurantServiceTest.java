@@ -34,8 +34,7 @@ public class RestaurantServiceTest {
 
     @Test
     public void givenValidRequestAndUserWhenCreateThenSucceeds() throws BadRequestException {
-        RestaurantRequest request = new RestaurantRequest();
-        request.setName("restaurantName");
+        RestaurantRequest request = new RestaurantRequest(null, "restaurantName");
 
         service.create(request, "restaurantUser");
 
@@ -46,8 +45,7 @@ public class RestaurantServiceTest {
 
     @Test
     public void givenInvalidRequestAndUserWhenCreateThenFails() throws BadRequestException {
-        RestaurantRequest request = new RestaurantRequest();
-        request.setName("restaurantName");
+        RestaurantRequest request = new RestaurantRequest(null, "restaurantName");
 
         when(mockRestaurantRepository.save(any())).thenThrow(new DataIntegrityViolationException(null));
         assertThrows(BadRequestException.class, () -> service.create(request, "restaurantUser"));

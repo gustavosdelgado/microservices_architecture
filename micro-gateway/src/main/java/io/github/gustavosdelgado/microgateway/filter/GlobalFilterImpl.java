@@ -1,6 +1,7 @@
 package io.github.gustavosdelgado.microgateway.filter;
 
 import java.time.Clock;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -60,7 +61,11 @@ public class GlobalFilterImpl implements GlobalFilter, Ordered {
     }
 
     private void verifyAuthorizationToken(HttpHeaders headers) {
-        var authorization = headers.get("Authorization").get(0);
+        var authorization = Optional.ofNullable(headers).map(
+                h -> h.get("Authorization")).map(
+                auth -> auth.get(0))
+                .orElse(null);
+
         var token = authorization.replace("Bearer ", "");
         BaseVerification verification = (BaseVerification) JWT.require(Algorithm.HMAC512(secret))
                 .withIssuer("AuthService");
