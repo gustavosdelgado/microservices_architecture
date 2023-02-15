@@ -20,7 +20,7 @@
 
 ## 3.1 Diagram
 
-![Architecture Diagram](./doc/img/microservice_architecture.png "Diagram")
+![Architecture Diagram](./doc/img/microservice_architecture.jpg "Diagram")
 
 ## 3.2 Stack used:
 
