@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.gustavosdelgado.microorder.domain.order.OrderRequest;
 import io.github.gustavosdelgado.microorder.domain.order.OrderResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
+import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 import io.github.gustavosdelgado.microorder.service.OrderService;
 import io.github.gustavosdelgado.microorder.service.OrderTokenService;
 
@@ -61,9 +63,9 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
+    @GetMapping("/{oderId}")
     public ResponseEntity<OrderResponse> get(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
-            @Validated @RequestBody OrderRequest request) {
+            @PathVariable String oderId) {
 
         OrderResponse orderResponse = null;
         try {
@@ -71,7 +73,11 @@ public class OrderController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            orderResponse = service.get(request.orderId());
+            orderResponse = service.get(oderId);
+
+        } catch (NotFoundException e) {
+            logger.error("Fail to get order", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         } catch (Exception e) {
             logger.error("Fail to get order", e);
