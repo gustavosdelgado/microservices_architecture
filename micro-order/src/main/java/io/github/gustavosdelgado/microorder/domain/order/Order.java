@@ -20,6 +20,11 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(of = "id")
 public class Order {
 
+    public Order(String orderId, String restaurantId) {
+        this.orderId = orderId;
+        this.restaurantId = restaurantId;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
