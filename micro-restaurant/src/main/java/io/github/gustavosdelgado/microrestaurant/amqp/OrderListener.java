@@ -12,7 +12,7 @@ public class OrderListener {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @RabbitListener(queues = "order.created")
+    @RabbitListener(queues = "order.created-restaurant")
     public void receiveMessage(OrderRequest request) {
 
         String orderData = """

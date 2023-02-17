@@ -1,6 +1,6 @@
 package io.github.gustavosdelgado.microorder.amqp;
 
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,11 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OrderAMQP {
-
-    @Bean
-    public Queue createQueue() {
-        return new Queue("order.created", true);
-    }
 
     @Bean
     public RabbitAdmin createRabbitAdmin(ConnectionFactory factory) {
@@ -40,4 +35,9 @@ public class OrderAMQP {
         rabbitTemplate.setMessageConverter(converter);
         return rabbitTemplate;
     }
+
+    @Bean
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange("order.exchange");
+    } 
 }

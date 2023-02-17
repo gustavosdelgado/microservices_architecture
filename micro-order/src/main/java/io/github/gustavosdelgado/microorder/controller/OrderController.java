@@ -50,7 +50,7 @@ public class OrderController {
             }
 
             service.create(request);
-            rabbitTemplate.convertAndSend("order.created", request);
+            rabbitTemplate.convertAndSend("order.exchange", "", request);
 
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
