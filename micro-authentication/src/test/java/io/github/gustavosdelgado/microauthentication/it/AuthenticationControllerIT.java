@@ -3,7 +3,9 @@ package io.github.gustavosdelgado.microauthentication.it;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,19 +17,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
+import io.github.gustavosdelgado.microauthentication.domain.user.Role;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc(addFilters = false)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuthenticationControllerIT {
 
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @BeforeAll
+    public void setup() {
+        restTemplate.postForEntity("/user",
+                new AuthenticationRequest("gustavosd", "123456", Role.ROLE_CONSUMER), String.class);
+    }
+
     @Test
     public void givenValidCredentialsWhenAuthenticateThenSuccess() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
-                new AuthenticationRequest("gustavosd", "123456"), String.class);
+                new AuthenticationRequest("gustavosd", "123456", null), String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.hasBody());
@@ -36,7 +46,7 @@ public class AuthenticationControllerIT {
     @Test
     public void givenInvalidPasswordWhenAuthenticateThenFail() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
-                new AuthenticationRequest("gustavosd", "invalidPassword"), String.class);
+                new AuthenticationRequest("gustavosd", "invalidPassword", null), String.class);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
@@ -44,7 +54,7 @@ public class AuthenticationControllerIT {
     @Test
     public void givenInvalidUsernameWhenAuthenticateThenFail() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
-                new AuthenticationRequest("invalidUsername", "invalidPassword"), String.class);
+                new AuthenticationRequest("invalidUsername", "invalidPassword", null), String.class);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
@@ -52,7 +62,15 @@ public class AuthenticationControllerIT {
     @Test
     public void givenNullCredentialWhenAuthenticateThenFail() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
-                new AuthenticationRequest(null, null), String.class);
+                new AuthenticationRequest(null, null, null), String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void givenEmptyCredentialWhenAuthenticateThenFail() throws Exception {
+        ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
+                new AuthenticationRequest("", "", null), String.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }

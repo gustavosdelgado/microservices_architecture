@@ -66,6 +66,7 @@ public class RestaurantController {
             logger.info("RequestID encaminhado: {}", requestId);
 
             if (!isAuthorized(authorizationToken)) {
+                logger.info("Fail to get Restaurant Entity: unauthorized token");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
@@ -73,9 +74,11 @@ public class RestaurantController {
             return ResponseEntity.ok(response);
 
         } catch (NoDataFoundException e) {
+            logger.error("Fail to get Restaurant Entity", e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         } catch (UnauthorizedException e) {
+            logger.error("Fail to get Restaurant Entity", e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         } catch (Exception e) {

@@ -1,1 +1,0 @@
-INSERT INTO users (login, password, role) VALUES('gustavosd', '$2a$12$0EQNGuPwrZoW/7GoK8H0I.tGk64UN9yfV6GXLJg2WbQnoE0mvHLOi', 'ROLE_RESTAURANT');

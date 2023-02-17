@@ -13,29 +13,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
 import io.github.gustavosdelgado.microauthentication.domain.user.JwtData;
+import io.github.gustavosdelgado.microauthentication.exception.BadRequestException;
 import io.github.gustavosdelgado.microauthentication.service.AuthenticationService;
+import io.github.gustavosdelgado.microauthentication.service.UserDetailserviceImpl;
 
 @RestController
-public class AuthenticationController {
+public class UserController {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private AuthenticationService authService;
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<JwtData> authenticate(@RequestBody @Valid AuthenticationRequest request) {
+    @Autowired
+    private UserDetailserviceImpl userService;
+
+    @PostMapping("/user")
+    public ResponseEntity<JwtData> create(@RequestBody @Valid AuthenticationRequest request) {
 
         try {
+            userService.create(request);
+
             String jwt = authService.generateToken(request);
-    
+
             return ResponseEntity.ok(new JwtData(jwt));
+        } catch (BadRequestException e) {
+            logger.error("User creation failure: ", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
         } catch (RuntimeException e) {
-            logger.error("Authentication failure: ", e);
+            logger.error("User creation failure: ", e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         } catch (Exception e) {
-            logger.error("Authentication failure: ", e);
+            logger.error("User creation failure: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
