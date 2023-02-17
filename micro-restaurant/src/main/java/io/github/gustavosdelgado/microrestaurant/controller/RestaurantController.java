@@ -45,7 +45,7 @@ public class RestaurantController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            restaurantService.create(request, tokenService.getUser(authorizationToken));
+            restaurantService.create(request, tokenService.getUserId(authorizationToken));
             return ResponseEntity.status(HttpStatus.CREATED).build();
 
         } catch (BadRequestException e) {
@@ -70,7 +70,7 @@ public class RestaurantController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            RestaurantResponse response = restaurantService.get(id, tokenService.getUser(authorizationToken));
+            RestaurantResponse response = restaurantService.get(id, tokenService.getUserId(authorizationToken));
             return ResponseEntity.ok(response);
 
         } catch (NoDataFoundException e) {

@@ -28,6 +28,15 @@ public class RestaurantTokenService {
         }
     }
 
+    public Long getUserId(String tokenJWT) {
+        try {
+            return decodeJwt(tokenJWT).getClaim("userId").asLong();
+        } catch (JWTVerificationException exception) {
+            LoggerFactory.getLogger(getClass()).error("Fail to verify token: ", exception);
+            return null;
+        }
+    }
+
     public String getUser(String tokenJWT) {
         try {
             return decodeJwt(tokenJWT).getSubject();

@@ -33,6 +33,7 @@ public class AuthTokenService {
                     .withSubject(user.getLogin())
                     .withExpiresAt(dataExpiracao())
                     .withClaim("role", user.getRole().name())
+                    .withClaim("userId", user.getId())
                     .sign(algoritmo);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error creating token", exception);

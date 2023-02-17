@@ -1,12 +1,16 @@
 package io.github.gustavosdelgado.microrestaurant.domain.restaurant;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import io.github.gustavosdelgado.microrestaurant.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,9 +24,9 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(of = "id")
 public class Restaurant {
 
-    public Restaurant(String name, String user) {
+    public Restaurant(String name, List<User> users) {
         this.name = name;
-        this.user = user;
+        this.users = users;
     }
 
     @Id
@@ -32,7 +36,8 @@ public class Restaurant {
     @Column(unique = true)
     private String name;
 
+    @OneToMany
     @Column(nullable = false)
-    private String user;
+    private List<User> users;
 
 }

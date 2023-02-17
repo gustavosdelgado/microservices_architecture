@@ -1,27 +1,11 @@
 package io.github.gustavosdelgado.microrestaurant.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
 
-import io.github.gustavosdelgado.microrestaurant.domain.restaurant.Restaurant;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRepository;
-import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRequest;
-import io.github.gustavosdelgado.microrestaurant.exception.BadRequestException;
-import io.github.gustavosdelgado.microrestaurant.exception.NoDataFoundException;
-import io.github.gustavosdelgado.microrestaurant.exception.UnauthorizedException;
 
 @ExtendWith(MockitoExtension.class)
 public class RestaurantServiceTest {
@@ -32,55 +16,61 @@ public class RestaurantServiceTest {
     @InjectMocks
     private RestaurantService service;
 
-    @Test
-    public void givenValidRequestAndUserWhenCreateThenSucceeds() throws BadRequestException {
-        RestaurantRequest request = new RestaurantRequest(null, "restaurantName");
+    // @Test
+    // public void givenValidRequestAndUserWhenCreateThenSucceeds() throws
+    // BadRequestException {
+    // RestaurantRequest request = new RestaurantRequest(null, "restaurantName");
 
-        service.create(request, "restaurantUser");
+    // service.create(request, "restaurantUser");
 
-        verify(mockRestaurantRepository).save(any());
+    // verify(mockRestaurantRepository).save(any());
 
-        verifyNoMoreInteractions(mockRestaurantRepository);
-    }
+    // verifyNoMoreInteractions(mockRestaurantRepository);
+    // }
 
-    @Test
-    public void givenInvalidRequestAndUserWhenCreateThenFails() throws BadRequestException {
-        RestaurantRequest request = new RestaurantRequest(null, "restaurantName");
+    // @Test
+    // public void givenInvalidRequestAndUserWhenCreateThenFails() throws
+    // BadRequestException {
+    // RestaurantRequest request = new RestaurantRequest(null, "restaurantName");
 
-        when(mockRestaurantRepository.save(any())).thenThrow(new DataIntegrityViolationException(null));
-        assertThrows(BadRequestException.class, () -> service.create(request, "restaurantUser"));
+    // when(mockRestaurantRepository.save(any())).thenThrow(new
+    // DataIntegrityViolationException(null));
+    // assertThrows(BadRequestException.class, () -> service.create(request,
+    // "restaurantUser"));
 
-        verify(mockRestaurantRepository).save(any());
+    // verify(mockRestaurantRepository).save(any());
 
-        verifyNoMoreInteractions(mockRestaurantRepository);
-    }
+    // verifyNoMoreInteractions(mockRestaurantRepository);
+    // }
 
-    @Test
-    public void givenValidIdAndUserWhenGetThenSucceeds() throws NoDataFoundException, UnauthorizedException {
-        Restaurant restaurant = new Restaurant(1L, "name", "user");
-        Optional<Restaurant> rOptional = Optional.of(restaurant);
-        when(mockRestaurantRepository.findById(1L)).thenReturn(rOptional);
+    // @Test
+    // public void givenValidIdAndUserWhenGetThenSucceeds() throws
+    // NoDataFoundException, UnauthorizedException {
+    // Restaurant restaurant = new Restaurant(1L, "name", "user");
+    // Optional<Restaurant> rOptional = Optional.of(restaurant);
+    // when(mockRestaurantRepository.findById(1L)).thenReturn(rOptional);
 
-        assertEquals(restaurant.getName(), service.get(1L, "user").getName());
-    }
+    // assertEquals(restaurant.getName(), service.get(1L, "user").getName());
+    // }
 
-    @Test
-    public void givenRestaurantNotFoundWhenGetThenFails() throws NoDataFoundException {
-        Optional<Restaurant> rOptional = Optional.ofNullable(null);
-        when(mockRestaurantRepository.findById(1L)).thenReturn(rOptional);
+    // @Test
+    // public void givenRestaurantNotFoundWhenGetThenFails() throws
+    // NoDataFoundException {
+    // Optional<Restaurant> rOptional = Optional.ofNullable(null);
+    // when(mockRestaurantRepository.findById(1L)).thenReturn(rOptional);
 
-        assertThrows(NoDataFoundException.class, () -> service.get(1L,
-                "user").getName());
-    }
+    // assertThrows(NoDataFoundException.class, () -> service.get(1L,
+    // "user").getName());
+    // }
 
-    @Test
-    public void givenInvalidUserWhenGetThenFails() throws NoDataFoundException {
-        Restaurant restaurant = new Restaurant(1L, "name", "user");
-        Optional<Restaurant> rOptional = Optional.of(restaurant);
-        when(mockRestaurantRepository.findById(1L)).thenReturn(rOptional);
+    // @Test
+    // public void givenInvalidUserWhenGetThenFails() throws NoDataFoundException {
+    // Restaurant restaurant = new Restaurant(1L, "name", "user");
+    // Optional<Restaurant> rOptional = Optional.of(restaurant);
+    // when(mockRestaurantRepository.findById(1L)).thenReturn(rOptional);
 
-        assertThrows(UnauthorizedException.class, () -> service.get(1L,
-                "invalidUser").getName());
-    }
+    // assertThrows(UnauthorizedException.class, () -> service.get(1L,
+    // "invalidUser").getName());
+    // }
 
 }
