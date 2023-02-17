@@ -1,7 +1,7 @@
 package io.github.gustavosdelgado.microorder.domain.order;
 
-import org.springframework.lang.NonNull;
+import javax.validation.constraints.NotEmpty;
 
-public record OrderRequest(@NonNull String orderId, @NonNull String restaurantId) {
+public record OrderRequest(@NotEmpty String orderId, @NotEmpty String restaurantId) {
     
 }
