@@ -1,5 +1,6 @@
 package io.github.gustavosdelgado.microauthentication.service;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,9 @@ public class UserDetailserviceImpl implements UserDetailsService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByLogin(username);
@@ -27,11 +31,13 @@ public class UserDetailserviceImpl implements UserDetailsService {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         User user = new User(request.login(), bcrypt.encode(request.password()), request.role());
         try {
-            repository.save(user);
+            user = repository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e);
 
         }
+
+        rabbitTemplate.convertAndSend("user.exchange", "", user);
     }
 
 }

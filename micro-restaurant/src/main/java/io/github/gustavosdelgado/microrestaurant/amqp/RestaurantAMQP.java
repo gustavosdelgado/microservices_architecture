@@ -10,10 +10,12 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class RestaurantAMQP {
@@ -32,21 +34,6 @@ public class RestaurantAMQP {
     }
 
     @Bean
-    public Queue createOrderCreatedQueue() {
-        return QueueBuilder.durable("order.created-restaurant").build();
-    }
-
-    @Bean
-    public FanoutExchange fanoutExchange() {
-        return ExchangeBuilder.fanoutExchange("order.exchange").build();
-    }
-
-    @Bean
-    public Binding bindOrderCreated(FanoutExchange exhange) {
-        return BindingBuilder.bind(createOrderCreatedQueue()).to(exhange);
-    }
-
-    @Bean
     public RabbitAdmin createRabbitAdmin(ConnectionFactory factory) {
         return new RabbitAdmin(factory);
     }
@@ -55,4 +42,38 @@ public class RestaurantAMQP {
     public ApplicationListener<ApplicationReadyEvent> initAdmin(RabbitAdmin admin) {
         return event -> admin.initialize();
     }
+
+    @Bean
+    public Queue createOrderCreatedQueue() {
+        return QueueBuilder.durable("order.created-restaurant").build();
+    }
+
+    @Bean
+    @Qualifier("order.exchange")
+    public FanoutExchange orderExchange() {
+        return ExchangeBuilder.fanoutExchange("order.exchange").build();
+    }
+
+    @Bean
+    public Binding bindOrderCreated(FanoutExchange exhange) {
+        return BindingBuilder.bind(createOrderCreatedQueue()).to(orderExchange());
+    }
+
+    @Bean
+    public Queue createUserCreatedQueue() {
+        return QueueBuilder.durable("user.created-restaurant").build();
+    }
+
+    @Bean
+    @Qualifier("user.exchange")
+    @Primary
+    public FanoutExchange userExchange() {
+        return ExchangeBuilder.fanoutExchange("user.exchange").build();
+    }
+
+    @Bean
+    public Binding bindUserCreated(FanoutExchange exhange) {
+        return BindingBuilder.bind(createUserCreatedQueue()).to(userExchange());
+    }
+
 }
