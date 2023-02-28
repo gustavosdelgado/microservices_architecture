@@ -1,6 +1,8 @@
 package io.github.gustavosdelgado.microgateway.filter;
 
 import java.time.Clock;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -31,9 +34,21 @@ public class GlobalFilterImpl implements GlobalFilter, Ordered {
     @Value("${api.security.token.secret}")
     private String secret;
 
+    private final HashSet<String> authorizedEndpoints = new HashSet<>(Arrays.asList("/authenticate", "/user"));
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         HttpHeaders headers = exchange.getRequest().getHeaders();
+        RequestPath path = exchange.getRequest().getPath();
+
+        if (authorizedEndpoints.contains(path.value())) {
+            addRequestId(exchange);
+            logger.info("Authentication request, forwarding...");
+            return chain.filter(exchange)
+                    .then(Mono.fromRunnable(() -> {
+                        logger.info("Global Post Filter executed");
+                    }));
+        }
 
         if (!headers.containsKey("Authorization")) {
             logger.info("Authorization header absent.");

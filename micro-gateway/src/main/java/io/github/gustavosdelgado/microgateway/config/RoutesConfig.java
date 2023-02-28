@@ -26,6 +26,12 @@ public class RoutesConfig {
 				.route("order_query", p -> p
 						.path("/order")
 						.uri(uriConfiguration.getOrderUri()))
+				.route("auth", p -> p
+						.path("/authenticate")
+						.uri(uriConfiguration.getAuthUri()))
+				.route("user", p -> p
+						.path("/user")
+						.uri(uriConfiguration.getAuthUri()))
                 .build();
     }
 
