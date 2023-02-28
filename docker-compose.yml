@@ -36,7 +36,6 @@ services:
       target: development
     env_file: ./.env
     ports:
-      - 9000:9000
       - 8000:8000
     volumes:
       - .m2:/root/.m2
@@ -68,7 +67,6 @@ services:
       target: development
     env_file: ./.env
     ports:
-      - 8081:8081
       - 8082:8082
     volumes:
       - .m2:/root/.m2
@@ -83,7 +81,6 @@ services:
       target: development
     env_file: ./.env
     ports:
-      - 8181:8181
       - 8182:8182
     volumes:
       - .m2:/root/.m2
@@ -95,7 +92,6 @@ services:
       container_name: rabbitmq
       restart: always
       ports:
-          - 5672:5672
           - 15672:15672
       volumes:
           - ./dados:/var/lib/rabbitmq/
