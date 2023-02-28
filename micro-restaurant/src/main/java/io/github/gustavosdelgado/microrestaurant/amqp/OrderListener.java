@@ -21,6 +21,7 @@ public class OrderListener {
                 """.formatted(request.orderId(), request.restaurantId());
 
         logger.info("No restaurante foi recebida a mensagem: {}", orderData);
+
     }
 
 }

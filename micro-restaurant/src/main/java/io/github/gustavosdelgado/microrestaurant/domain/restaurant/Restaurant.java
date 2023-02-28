@@ -40,4 +40,8 @@ public class Restaurant {
     @Column(nullable = false)
     private List<User> users;
 
+    // @OneToMany
+    // @Column(nullable = false)
+    // private List<Order> orders;
+
 }
