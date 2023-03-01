@@ -40,8 +40,6 @@ services:
     volumes:
       - .m2:/root/.m2
       - ./logs:/root/logs
-    stdin_open: true
-    tty: true
   gateway:
     depends_on:
       - auth
@@ -57,8 +55,6 @@ services:
     volumes:
       - .m2:/root/.m2
       - ./logs:/root/logs
-    stdin_open: true
-    tty: true
   restaurant:
     depends_on:
       - mysqldb-restaurant
@@ -71,8 +67,6 @@ services:
     volumes:
       - .m2:/root/.m2
       - ./logs:/root/logs
-    stdin_open: true
-    tty: true
   order:
     depends_on:
       - mysqldb-order
@@ -85,8 +79,6 @@ services:
     volumes:
       - .m2:/root/.m2
       - ./logs:/root/logs
-    stdin_open: true
-    tty: true
   rabbitmq:
       image: rabbitmq:3.11-management
       container_name: rabbitmq
@@ -96,8 +88,8 @@ services:
       volumes:
           - ./dados:/var/lib/rabbitmq/
       environment:
-          - RABBITMQ_DEFAULT_USER=gustavosd
-          - RABBITMQ_DEFAULT_PASS=123456
+          - RABBITMQ_DEFAULT_USER=$RABBITMQ_USER
+          - RABBITMQ_DEFAULT_PASS=$RABBITMQ_PASSOWRD
 
 volumes:
   db-auth:
