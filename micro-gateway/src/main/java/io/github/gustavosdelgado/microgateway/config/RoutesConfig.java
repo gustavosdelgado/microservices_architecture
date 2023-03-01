@@ -17,20 +17,30 @@ public class RoutesConfig {
         return builder.routes()
 				.route("restaurant_command", p -> p
 						.path("/restaurant/**")
-						.filters(f -> f.rewritePath("/restaurant/(?<segment>.*)", "/restaurant/${segment}"))
+						.filters(f -> f.rewritePath("/restaurant/(?<segment>.*)", "/restaurant/${segment}")
+								.circuitBreaker(config -> config
+										.setName("restaurant_cb")))
 						.uri(uriConfiguration.getRestaurantUri()))
 				.route("restaurant_query", p -> p
 						.path("/restaurant")
-						.filters(f -> f.filter(new RestaurantGatewayFilter()))
+						.filters(f -> f.filter(new RestaurantGatewayFilter())
+								.circuitBreaker(config -> config
+										.setName("restaurant_cb")))
 						.uri(uriConfiguration.getRestaurantUri()))
 				.route("order_query", p -> p
 						.path("/order")
+						.filters(f -> f.circuitBreaker(config -> config
+								.setName("order_cb")))
 						.uri(uriConfiguration.getOrderUri()))
 				.route("auth", p -> p
 						.path("/authenticate")
+						.filters(f -> f.circuitBreaker(config -> config
+								.setName("auth_cb")))
 						.uri(uriConfiguration.getAuthUri()))
 				.route("user", p -> p
 						.path("/user")
+						.filters(f -> f.circuitBreaker(config -> config
+								.setName("auth_cb")))
 						.uri(uriConfiguration.getAuthUri()))
                 .build();
     }

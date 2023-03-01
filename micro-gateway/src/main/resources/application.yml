@@ -4,3 +4,11 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG
+resilience4j:
+  instances:
+    auth_cb:
+      timeoutDuration: 2s
+    restaurant_cb:
+      timeoutDuration: 2s
+    order_cb:
+      timeoutDuration: 2s
