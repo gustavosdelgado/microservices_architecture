@@ -45,6 +45,7 @@ services:
       - auth
       - restaurant
       - order
+      - rabbitmq
     build: 
       context: ./micro-gateway
       target: development
@@ -76,6 +77,16 @@ services:
     env_file: ./.env
     ports:
       - 8182:8182
+    volumes:
+      - .m2:/root/.m2
+      - ./logs:/root/logs
+  e2e-tests:
+    depends_on:
+      - gateway
+    build: 
+      context: ./e2e-tests
+      target: test
+    env_file: ./.env
     volumes:
       - .m2:/root/.m2
       - ./logs:/root/logs
