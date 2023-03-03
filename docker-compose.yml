@@ -80,16 +80,6 @@ services:
     volumes:
       - .m2:/root/.m2
       - ./logs:/root/logs
-  e2e-tests:
-    depends_on:
-      - gateway
-    build: 
-      context: ./e2e-tests
-      target: test
-    env_file: ./.env
-    volumes:
-      - .m2:/root/.m2
-      - ./logs:/root/logs
   rabbitmq:
       image: rabbitmq:3.11-management
       container_name: rabbitmq
