@@ -15,6 +15,6 @@ jobs:
         - name: Tests verification
           run: |  
             mvn clean install -f ./pom.xml
-            mvn surefire:test failsafe:integration-test -f ./micro-authentication/pom.xml
-            mvn surefire:test failsafe:integration-test -f ./micro-gateway/pom.xml
-            mvn surefire:test failsafe:integration-test -f ./micro-restaurant/pom.xml
+            mvn surefire:test failsafe:integration-test failsafe:verify -f ./micro-authentication/pom.xml
+            mvn surefire:test failsafe:integration-test failsafe:verify -f ./micro-gateway/pom.xml
+            mvn surefire:test failsafe:integration-test failsafe:verify -f ./micro-restaurant/pom.xml
