@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import io.github.gustavosdelgado.microorder.domain.order.Order;
 import io.github.gustavosdelgado.microorder.domain.order.OrderRepository;
-import io.github.gustavosdelgado.microorder.domain.order.OrderRequest;
-import io.github.gustavosdelgado.microorder.domain.order.OrderResponse;
+import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
+import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
 import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 
@@ -22,7 +22,7 @@ public class OrderService {
     @Autowired
     private OrderRepository repository;
 
-    public void create(OrderRequest request) throws BadRequestException {
+    public void create(OrderWebRequest request) throws BadRequestException {
         Order order = new Order(request.orderId(), request.restaurantId());
         try {
             repository.save(order);
@@ -32,7 +32,7 @@ public class OrderService {
         }
     }
 
-    public OrderResponse get(String orderId) throws NotFoundException {
+    public OrderWebResponse get(Long orderId) throws NotFoundException {
         Optional<Order> optional = repository.findByOrderId(orderId);
 
         if (!optional.isPresent()) {
@@ -41,6 +41,6 @@ public class OrderService {
 
         Order order = optional.get();
 
-        return new OrderResponse(order.getId(), order.getOrderId(), order.getRestaurantId());
+        return order.adaptToWebResponse();
     }
 }

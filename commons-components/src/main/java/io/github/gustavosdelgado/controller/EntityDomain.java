@@ -1,6 +1,6 @@
 package io.github.gustavosdelgado.controller;
 
-public interface Entity {
+public interface EntityDomain {
 
     public WebResponse adaptToWebResponse();
 

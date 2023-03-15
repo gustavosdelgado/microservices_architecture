@@ -16,8 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.github.gustavosdelgado.microorder.domain.order.Order;
 import io.github.gustavosdelgado.microorder.domain.order.OrderRepository;
-import io.github.gustavosdelgado.microorder.domain.order.OrderRequest;
-import io.github.gustavosdelgado.microorder.domain.order.OrderResponse;
+import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
+import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
 import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 
@@ -32,7 +32,7 @@ public class OrderServiceTest {
 
     @Test
     void testCreate() throws BadRequestException {
-        OrderRequest request = new OrderRequest("orderId", "restaurantId");
+        OrderWebRequest request = new OrderWebRequest(12345L, 54321L);
         service.create(request);
 
         verify(mockRepository).save(any());
@@ -42,15 +42,15 @@ public class OrderServiceTest {
 
     @Test
     void testGet() throws NotFoundException {
-        Order order = new Order(1L, "orderId", "restaurantId");
-        when(mockRepository.findByOrderId("orderId")).thenReturn(Optional.of(order));
+        Order order = new Order(1L, 12345L, 54321L);
+        when(mockRepository.findByOrderId(12345L)).thenReturn(Optional.of(order));
 
-        OrderResponse orderResponse = service.get("orderId");
+        OrderWebResponse orderResponse = service.get(12345L);
         assertEquals(1L, orderResponse.id());
-        assertEquals("orderId", orderResponse.orderId());
-        assertEquals("restaurantId", orderResponse.restaurantId());
+        assertEquals(12345L, orderResponse.orderId());
+        assertEquals(54321L, orderResponse.restaurantId());
 
-        verify(mockRepository).findByOrderId("orderId");
+        verify(mockRepository).findByOrderId(12345L);
 
         verifyNoMoreInteractions(mockRepository);
     }

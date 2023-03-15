@@ -22,7 +22,6 @@
         <module>micro-gateway</module>
         <module>micro-order</module>
         <module>micro-restaurant</module>
-		<module>e2e-tests</module>
     </modules>
 
 	<properties>

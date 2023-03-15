@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.gustavosdelgado.microorder.domain.order.OrderRequest;
-import io.github.gustavosdelgado.microorder.domain.order.OrderResponse;
+import io.github.gustavosdelgado.controller.Controller;
+import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
+import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
 import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 import io.github.gustavosdelgado.microorder.service.OrderService;
@@ -25,7 +26,7 @@ import io.github.gustavosdelgado.microorder.service.OrderTokenService;
 
 @RestController
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController implements Controller<OrderWebRequest, OrderWebResponse> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -41,8 +42,8 @@ public class OrderController {
     private OrderTokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
-            @Validated @RequestBody OrderRequest request) {
+    public ResponseEntity<OrderWebResponse> create(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
+            @Validated @RequestBody OrderWebRequest request) {
 
         try {
             if (!isAuthorized(authorizationToken)) {
@@ -64,16 +65,16 @@ public class OrderController {
     }
 
     @GetMapping("/{oderId}")
-    public ResponseEntity<OrderResponse> get(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
-            @PathVariable String oderId) {
+    public ResponseEntity<OrderWebResponse> get(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
+            @PathVariable Long orderId) {
 
-        OrderResponse orderResponse = null;
         try {
             if (!isAuthorized(authorizationToken)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            orderResponse = service.get(oderId);
+            OrderWebResponse orderResponse = service.get(orderId);
+            return ResponseEntity.ok(orderResponse);
 
         } catch (NotFoundException e) {
             logger.error("Fail to get order", e);
@@ -84,12 +85,30 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
-        return ResponseEntity.ok(orderResponse);
     }
 
-    private boolean isAuthorized(String token) {
+    @Override
+    public boolean isAuthorized(String token) {
         String role = tokenService.getRole(token);
         return CONSUMER_ROLE.equals(role);
+    }
+
+    @Override
+    public ResponseEntity<OrderWebResponse> list(String token) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'list'");
+    }
+
+    @Override
+    public ResponseEntity<OrderWebResponse> delete(String token, Long entityId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
+
+    @Override
+    public ResponseEntity<OrderWebResponse> update(String token, Long entityId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
 }
