@@ -40,6 +40,18 @@ public interface Controller<R extends WebRequest, S extends WebResponse> {
     public ResponseEntity<S> get(String token, Long entityId);
 
     /**
+     * Entity query list API endpoint. Must pass a JWT token in order to authorise
+     * the
+     * request.
+     * 
+     * @param token
+     *                 JWT token containing authorization data.
+     * @return
+     *         must return the queried entity list, if available.
+     */
+    public ResponseEntity<S> list(String token);
+
+    /**
      * Entity removal API endpoint. Must pass a JWT token in order to authorise the
      * request.
      * 
@@ -50,6 +62,6 @@ public interface Controller<R extends WebRequest, S extends WebResponse> {
      * @return
      *         must return the deleted entity, if available.
      */
-    public ResponseEntity<S> get(String token, Long entityId);
+    public ResponseEntity<S> delete(String token, Long entityId);
 
 }
