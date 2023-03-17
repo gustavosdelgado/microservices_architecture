@@ -1,5 +1,7 @@
 package io.github.gustavosdelgado.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -44,12 +46,14 @@ public interface Controller<R extends WebRequest, S extends WebResponse> {
      * the
      * request.
      * 
+     * @param pageable - Spring MVC infers Pageable through request parameters.
+     * 
      * @param token
      *                 JWT token containing authorization data.
      * @return
      *         must return the queried entity list, if available.
      */
-    public ResponseEntity<S> list(String token);
+    public ResponseEntity<Page<S>> list(Pageable pageable, String token);
 
     /**
      * Entity update API endpoint. Must pass a JWT token in order to authorise the

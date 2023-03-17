@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,13 +90,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
     }
 
     @Override
-    public boolean isAuthorized(String token) {
-        String role = tokenService.getRole(token);
-        return CONSUMER_ROLE.equals(role);
-    }
-
-    @Override
-    public ResponseEntity<OrderWebResponse> list(String token) {
+    public ResponseEntity<Page<OrderWebResponse>> list(Pageable pageable, String token) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'list'");
     }
@@ -109,6 +105,12 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
     public ResponseEntity<OrderWebResponse> update(String token, Long entityId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
+
+    @Override
+    public boolean isAuthorized(String token) {
+        String role = tokenService.getRole(token);
+        return CONSUMER_ROLE.equals(role);
     }
 
 }
