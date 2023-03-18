@@ -6,7 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import io.github.gustavosdelgado.amqp.Listener;
+import io.github.gustavosdelgado.library.amqp.Listener;
 import io.github.gustavosdelgado.microrestaurant.domain.user.User;
 import io.github.gustavosdelgado.microrestaurant.domain.user.UserRepository;
 

@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.service;
+package io.github.gustavosdelgado.library.service;
 
 import org.springframework.stereotype.Service;
 

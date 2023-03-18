@@ -1,8 +1,9 @@
-package io.github.gustavosdelgado.controller;
+package io.github.gustavosdelgado.library.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * The <code>Controller</code> is an interface created to enforce a
@@ -26,6 +27,7 @@ public interface Controller<R extends WebRequest, S extends WebResponse> {
      * @return
      *         must return the created entity.
      */
+    @PostMapping
     public ResponseEntity<S> create(String token, R request);
 
     /**

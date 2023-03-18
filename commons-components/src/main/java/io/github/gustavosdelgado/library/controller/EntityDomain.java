@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.controller;
+package io.github.gustavosdelgado.library.controller;
 
 public interface EntityDomain {
 

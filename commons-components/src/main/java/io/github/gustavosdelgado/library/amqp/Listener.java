@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.amqp;
+package io.github.gustavosdelgado.library.amqp;
 
 public interface Listener<T> {
 

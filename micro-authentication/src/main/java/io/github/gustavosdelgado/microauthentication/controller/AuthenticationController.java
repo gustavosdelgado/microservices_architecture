@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
 import io.github.gustavosdelgado.microauthentication.domain.user.JwtData;
 import io.github.gustavosdelgado.microauthentication.service.AuthenticationService;
-import io.github.gustavosdelgado.service.TestService;
 
 @RestController
 public class AuthenticationController {
@@ -24,15 +23,11 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authService;
 
-    @Autowired
-    private TestService testService;
-
     @PostMapping("/authenticate")
     public ResponseEntity<JwtData> authenticate(@RequestBody @Valid AuthenticationRequest request) {
 
         try {
             String jwt = authService.generateToken(request);
-            String test = testService.test();
     
             return ResponseEntity.ok(new JwtData(jwt));
         } catch (RuntimeException e) {
