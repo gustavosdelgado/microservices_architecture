@@ -5,15 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import io.github.gustavosdelgado.amqp.Listener;
 import io.github.gustavosdelgado.microrestaurant.domain.order.OrderRequest;
 
 @Component
-public class OrderListener {
+public class OrderListener implements Listener<OrderRequest> {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
     @RabbitListener(queues = "order.created-restaurant")
-    public void receiveMessage(OrderRequest request) {
+    public void listen(OrderRequest request) {
 
         String orderData = """
                  Order ID: %s

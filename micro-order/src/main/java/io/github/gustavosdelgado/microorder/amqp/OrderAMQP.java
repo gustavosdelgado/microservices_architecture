@@ -17,8 +17,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import io.github.gustavosdelgado.amqp.AMQP;
+
 @Configuration
-public class OrderAMQP {
+public class OrderAMQP implements AMQP {
 
     @Bean
     public RabbitAdmin createRabbitAdmin(ConnectionFactory factory) {

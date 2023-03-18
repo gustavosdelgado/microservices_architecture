@@ -6,11 +6,12 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import io.github.gustavosdelgado.amqp.Listener;
 import io.github.gustavosdelgado.microorder.domain.user.User;
 import io.github.gustavosdelgado.microorder.domain.user.UserRepository;
 
 @Component
-public class UserListener {
+public class UserListener implements Listener<User> {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -18,7 +19,7 @@ public class UserListener {
     private UserRepository userRepository;
 
     @RabbitListener(queues = "user.created-order")
-    public void syncCreatedUser(User userReceived) {
+    public void listen(User userReceived) {
 
         String userData = """
                  User ID: %s
