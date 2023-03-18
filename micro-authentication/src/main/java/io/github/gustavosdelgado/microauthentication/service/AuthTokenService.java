@@ -41,6 +41,6 @@ public class AuthTokenService {
     }
 
     private Instant dataExpiracao() {
-        return LocalDateTime.now().plusMinutes(expirationInMinutes).toInstant(ZoneOffset.UTC);
+        return LocalDateTime.now().plusMinutes(expirationInMinutes).toInstant(ZoneOffset.of("-03:00"));
     }
 }

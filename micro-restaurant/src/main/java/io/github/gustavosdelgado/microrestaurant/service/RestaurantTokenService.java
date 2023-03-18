@@ -1,6 +1,7 @@
 package io.github.gustavosdelgado.microrestaurant.service;
 
 import java.time.Clock;
+import java.time.ZoneId;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +55,7 @@ public class RestaurantTokenService {
         var algoritmo = Algorithm.HMAC512(secret);
         BaseVerification verification = (BaseVerification) JWT.require(algoritmo)
                 .withIssuer("AuthService");
-        JWTVerifier verifier = verification.build(Clock.systemUTC());
+        JWTVerifier verifier = verification.build(Clock.system(ZoneId.of("America/Sao_Paulo")));
         return verifier.verify(tokenJWT);
     }
 }
