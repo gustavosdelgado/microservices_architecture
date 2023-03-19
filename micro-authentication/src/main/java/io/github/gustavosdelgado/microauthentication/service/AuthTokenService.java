@@ -11,7 +11,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
-import io.github.gustavosdelgado.microauthentication.domain.user.User;
+import io.github.gustavosdelgado.library.domain.user.User;
 
 @Service
 public class AuthTokenService {

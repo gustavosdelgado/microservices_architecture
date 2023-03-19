@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.microorder.domain.user;
+package io.github.gustavosdelgado.library.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

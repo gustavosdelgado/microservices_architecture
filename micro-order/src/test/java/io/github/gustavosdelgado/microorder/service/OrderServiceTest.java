@@ -14,10 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.github.gustavosdelgado.microorder.domain.order.Order;
-import io.github.gustavosdelgado.microorder.domain.order.OrderRepository;
+import io.github.gustavosdelgado.library.domain.order.Order;
+import io.github.gustavosdelgado.library.domain.order.OrderRepository;
+import io.github.gustavosdelgado.library.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
-import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
 import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 
@@ -46,7 +46,6 @@ public class OrderServiceTest {
         when(mockRepository.findByOrderId(12345L)).thenReturn(Optional.of(order));
 
         OrderWebResponse orderResponse = service.get(12345L);
-        assertEquals(1L, orderResponse.id());
         assertEquals(12345L, orderResponse.orderId());
         assertEquals(54321L, orderResponse.restaurantId());
 

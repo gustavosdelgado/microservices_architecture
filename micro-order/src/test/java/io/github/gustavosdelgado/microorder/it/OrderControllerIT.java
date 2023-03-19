@@ -20,8 +20,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import io.github.gustavosdelgado.library.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
-import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.it.base.AuthTokenService;
 
 @RunWith(SpringRunner.class)
