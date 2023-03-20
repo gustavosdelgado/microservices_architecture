@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.microauthentication.exception;
+package io.github.gustavosdelgado.library.exception;
 
 public class BadRequestException extends Exception {
 

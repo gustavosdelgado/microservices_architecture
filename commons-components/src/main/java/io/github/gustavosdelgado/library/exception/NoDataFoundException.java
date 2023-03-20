@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.microrestaurant.exception;
+package io.github.gustavosdelgado.library.exception;
 
 public class NoDataFoundException extends Exception {
 

@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.gustavosdelgado.library.controller.Controller;
+import io.github.gustavosdelgado.library.exception.BadRequestException;
+import io.github.gustavosdelgado.library.exception.NoDataFoundException;
 import io.github.gustavosdelgado.library.service.AuthTokenService;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
-import io.github.gustavosdelgado.microorder.exception.BadRequestException;
-import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 import io.github.gustavosdelgado.microorder.service.OrderService;
 
 @RestController
@@ -78,7 +78,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
             OrderWebResponse orderResponse = service.get(orderId);
             return ResponseEntity.ok(orderResponse);
 
-        } catch (NotFoundException e) {
+        } catch (NoDataFoundException e) {
             logger.error("Fail to get order", e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 

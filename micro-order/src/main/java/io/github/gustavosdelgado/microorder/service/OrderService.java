@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import io.github.gustavosdelgado.library.domain.order.Order;
 import io.github.gustavosdelgado.library.domain.order.OrderRepository;
+import io.github.gustavosdelgado.library.exception.BadRequestException;
+import io.github.gustavosdelgado.library.exception.NoDataFoundException;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
-import io.github.gustavosdelgado.microorder.exception.BadRequestException;
-import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 
 @Service
 public class OrderService {
@@ -28,15 +28,15 @@ public class OrderService {
             repository.save(order);
         } catch (Exception e) {
             logger.error("Fail to create order: ", e);
-            throw new BadRequestException();
+            throw new BadRequestException(e);
         }
     }
 
-    public OrderWebResponse get(Long orderId) throws NotFoundException {
+    public OrderWebResponse get(Long orderId) throws NoDataFoundException {
         Optional<Order> optional = repository.findByOrderId(orderId);
 
         if (!optional.isPresent()) {
-            throw new NotFoundException("Order not found");
+            throw new NoDataFoundException("Order not found");
         }
 
         Order order = optional.get();

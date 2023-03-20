@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import io.github.gustavosdelgado.library.domain.user.User;
 import io.github.gustavosdelgado.library.domain.user.UserRepository;
+import io.github.gustavosdelgado.library.exception.BadRequestException;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
-import io.github.gustavosdelgado.microauthentication.exception.BadRequestException;
 
 @Service
 public class UserDetailserviceImpl implements UserDetailsService {

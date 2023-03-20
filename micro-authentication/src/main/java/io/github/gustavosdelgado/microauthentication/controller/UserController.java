@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.github.gustavosdelgado.library.exception.BadRequestException;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
 import io.github.gustavosdelgado.microauthentication.domain.user.JwtData;
-import io.github.gustavosdelgado.microauthentication.exception.BadRequestException;
 import io.github.gustavosdelgado.microauthentication.service.AuthenticationService;
 import io.github.gustavosdelgado.microauthentication.service.UserDetailserviceImpl;
 

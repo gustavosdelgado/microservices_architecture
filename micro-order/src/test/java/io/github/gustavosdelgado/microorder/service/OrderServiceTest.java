@@ -16,10 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.github.gustavosdelgado.library.domain.order.Order;
 import io.github.gustavosdelgado.library.domain.order.OrderRepository;
+import io.github.gustavosdelgado.library.exception.BadRequestException;
+import io.github.gustavosdelgado.library.exception.NoDataFoundException;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
-import io.github.gustavosdelgado.microorder.exception.BadRequestException;
-import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -41,7 +41,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void testGet() throws NotFoundException {
+    void testGet() throws NoDataFoundException {
         Order order = new Order(1L, 12345L, 54321L);
         when(mockRepository.findByOrderId(12345L)).thenReturn(Optional.of(order));
 
