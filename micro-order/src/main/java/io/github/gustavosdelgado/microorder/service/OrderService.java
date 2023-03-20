@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.github.gustavosdelgado.library.domain.order.Order;
-import io.github.gustavosdelgado.library.domain.order.OrderRepository;
+import io.github.gustavosdelgado.microorder.domain.order.Order;
+import io.github.gustavosdelgado.microorder.domain.order.OrderRepository;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
