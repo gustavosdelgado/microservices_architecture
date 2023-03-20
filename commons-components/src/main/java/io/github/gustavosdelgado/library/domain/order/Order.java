@@ -1,9 +1,7 @@
-package io.github.gustavosdelgado.microorder.domain.user;
+package io.github.gustavosdelgado.library.domain.order;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,32 +12,27 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "users")
-@Entity(name = "User")
+@Table(name = "pedido")
+@Entity(name = "Pedido")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class User {
+public class Order {
+
+    public Order(Long orderId, Long restaurantId) {
+        this.orderId = orderId;
+        this.restaurantId = restaurantId;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String login;
+    private Long orderId;
 
     @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    public User(String login, String password, Role role) {
-        this.login = login;
-        this.password = password;
-        this.role = role;
-    }
+    private Long restaurantId;
 
 }
