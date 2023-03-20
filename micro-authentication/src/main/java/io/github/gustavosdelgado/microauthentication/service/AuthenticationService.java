@@ -6,8 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import io.github.gustavosdelgado.library.domain.user.User;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
-import io.github.gustavosdelgado.microauthentication.domain.user.User;
 
 @Service
 public class AuthenticationService {

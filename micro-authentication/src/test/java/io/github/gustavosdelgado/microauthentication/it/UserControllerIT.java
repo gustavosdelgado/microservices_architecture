@@ -19,8 +19,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import io.github.gustavosdelgado.library.domain.user.Role;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
-import io.github.gustavosdelgado.microauthentication.domain.user.Role;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

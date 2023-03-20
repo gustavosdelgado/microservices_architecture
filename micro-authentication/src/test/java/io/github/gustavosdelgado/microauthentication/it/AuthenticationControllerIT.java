@@ -19,8 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import io.github.gustavosdelgado.library.domain.user.Role;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
-import io.github.gustavosdelgado.microauthentication.domain.user.Role;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
