@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.github.gustavosdelgado.library.service.AuthTokenService;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRequest;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantResponse;
 import io.github.gustavosdelgado.microrestaurant.exception.BadRequestException;
 import io.github.gustavosdelgado.microrestaurant.exception.NoDataFoundException;
 import io.github.gustavosdelgado.microrestaurant.exception.UnauthorizedException;
 import io.github.gustavosdelgado.microrestaurant.service.RestaurantService;
-import io.github.gustavosdelgado.microrestaurant.service.RestaurantTokenService;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -32,7 +32,7 @@ public class RestaurantController {
     private static final String RESTAURANT_ROLE = "ROLE_RESTAURANT";
 
     @Autowired
-    private RestaurantTokenService tokenService;
+    private AuthTokenService tokenService;
 
     @Autowired
     private RestaurantService restaurantService;

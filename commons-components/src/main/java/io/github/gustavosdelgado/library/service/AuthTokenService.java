@@ -65,6 +65,15 @@ public class AuthTokenService {
         }
     }
 
+    public Long getUserId(String tokenJWT) {
+        try {
+            return decodeJwt(tokenJWT).getClaim("userId").asLong();
+        } catch (JWTVerificationException exception) {
+            LoggerFactory.getLogger(getClass()).error("Fail to verify token: ", exception);
+            return null;
+        }
+    }
+
     private DecodedJWT decodeJwt(String tokenJWT) {
         if (tokenJWT == null) {
             throw new JWTVerificationException("Null token");
