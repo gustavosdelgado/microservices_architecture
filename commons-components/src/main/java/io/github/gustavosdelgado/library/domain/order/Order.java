@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(of = "id")
 public class Order {
 
-    public Order(long orderId, long restaurantId) {
+    public Order(Long orderId, Long restaurantId) {
         this.orderId = orderId;
         this.restaurantId = restaurantId;
     }
@@ -30,9 +30,9 @@ public class Order {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private long orderId;
+    private Long orderId;
 
     @Column(nullable = false)
-    private long restaurantId;
+    private Long restaurantId;
 
 }
