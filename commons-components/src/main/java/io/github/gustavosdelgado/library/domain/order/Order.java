@@ -40,7 +40,5 @@ public class Order implements EntityDomain {
     public OrderWebResponse adaptToWebResponse() {
         return new OrderWebResponse(this.orderId, this.restaurantId);
     }
-    // TODO: implement all domain-related classes at common library
-    // TODO: implement all common services at common library
 
 }
