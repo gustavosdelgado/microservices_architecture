@@ -1,30 +1,52 @@
-package io.github.gustavosdelgado.microorder.service;
+package io.github.gustavosdelgado.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
+import io.github.gustavosdelgado.library.domain.user.Role;
+import io.github.gustavosdelgado.library.domain.user.User;
+import io.github.gustavosdelgado.library.service.AuthTokenService;
+
 @ExtendWith(MockitoExtension.class)
-public class OrderTokenServiceTest {
+public class AuthTokenServiceTest {
 
     private static final String LOGIN = "login";
     private static final String SECRET = "secret";
     private static final String ROLE = "role";
 
-    private OrderTokenService service;
+    @InjectMocks
+    private AuthTokenService service;
+
+    @Test
+    void givenValidUserWhenGenerateTokenThenSucceed() {
+        User user = new User(1L, "login", "password", Role.ROLE_CONSUMER);
+        ReflectionTestUtils.setField(service, "secret", "secret");
+        ReflectionTestUtils.setField(service, "expirationInMinutes", 15);
+        assertNotNull(service.gerarToken(user), "Unexpected null return");
+    }
+
+    @Test
+    void givenNullUserWhenGenerateTokenThenFail() {
+        ReflectionTestUtils.setField(service, "secret", "secret");
+        assertThrows(RuntimeException.class,
+                () -> service.gerarToken(null), "Expected Exception not thrown");
+    }
 
     @Test
     void givenValidTokenWhenGetRoleThenSucceeds() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -39,7 +61,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenValidTokenWithDifferentClaimWhenGetRoleThenFails() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -54,7 +75,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenValidTokenWithDifferentSecretWhenGetRoleThenFails() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -69,7 +89,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenValidTokenWithDifferentIssuerWhenGetRoleThenFails() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -84,7 +103,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenTokenWithNoBearerWhenGetRoleThenSucceeds() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -99,7 +117,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenNullTokenWhenGetRoleThenFails() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         assertNull(service.getRole(null), "unexpected role");
@@ -107,7 +124,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenValidTokenWhenGetUserThenSucceeds() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -122,7 +138,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenValidTokenWithDifferentSecretWhenGetUserThenFails() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -137,7 +152,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenValidTokenWithDifferentIssuerWhenGetUserThenFails() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -152,7 +166,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenTokenWithNoBearerWhenGetUserThenSucceeds() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         String token = JWT.create()
@@ -167,7 +180,6 @@ public class OrderTokenServiceTest {
 
     @Test
     void givenNullTokenWhenGetUserThenFails() {
-        service = new OrderTokenService();
         ReflectionTestUtils.setField(service, SECRET, SECRET);
 
         assertNull(service.getRole(null), "unexpected role");

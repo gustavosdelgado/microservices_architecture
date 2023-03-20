@@ -79,7 +79,7 @@ public class GlobalFilterImpl implements GlobalFilter, Ordered {
         var authorization = Optional.ofNullable(headers).map(
                 h -> h.get("Authorization")).map(
                 auth -> auth.get(0))
-                .orElse(null);
+                .orElse("");
 
         var token = authorization.replace("Bearer ", "");
         BaseVerification verification = (BaseVerification) JWT.require(Algorithm.HMAC512(secret))

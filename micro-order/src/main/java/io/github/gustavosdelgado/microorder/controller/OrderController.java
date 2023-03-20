@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.gustavosdelgado.library.controller.Controller;
+import io.github.gustavosdelgado.library.service.AuthTokenService;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
 import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 import io.github.gustavosdelgado.microorder.service.OrderService;
-import io.github.gustavosdelgado.microorder.service.OrderTokenService;
 
 @RestController
 @RequestMapping("/order")
@@ -41,7 +41,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
     private OrderService service;
 
     @Autowired
-    private OrderTokenService tokenService;
+    private AuthTokenService tokenService;
 
     @PostMapping
     public ResponseEntity<OrderWebResponse> create(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
