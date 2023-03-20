@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.microrestaurant.domain.order;
+package io.github.gustavosdelgado.library.domain.order;
 
 import java.util.Optional;
 

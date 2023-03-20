@@ -5,7 +5,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRepository;
+import io.github.gustavosdelgado.library.domain.restaurant.RestaurantRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class RestaurantServiceTest {

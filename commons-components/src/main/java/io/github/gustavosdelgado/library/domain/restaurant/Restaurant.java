@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.microrestaurant.domain.restaurant;
+package io.github.gustavosdelgado.library.domain.restaurant;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import io.github.gustavosdelgado.microrestaurant.domain.user.User;
+import io.github.gustavosdelgado.library.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

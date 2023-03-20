@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.github.gustavosdelgado.library.amqp.Listener;
-import io.github.gustavosdelgado.microrestaurant.domain.user.User;
-import io.github.gustavosdelgado.microrestaurant.domain.user.UserRepository;
+import io.github.gustavosdelgado.library.domain.user.User;
+import io.github.gustavosdelgado.library.domain.user.UserRepository;
 
 @Component
 public class UserListener implements Listener<User> {
