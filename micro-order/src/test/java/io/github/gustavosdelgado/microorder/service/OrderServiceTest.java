@@ -14,8 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.github.gustavosdelgado.microorder.domain.order.Order;
-import io.github.gustavosdelgado.microorder.domain.order.OrderRepository;
+import io.github.gustavosdelgado.library.domain.order.Order;
+import io.github.gustavosdelgado.library.domain.order.OrderRepository;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
