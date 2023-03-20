@@ -7,6 +7,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 
+import io.github.gustavosdelgado.library.service.AuthTokenService;
+
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceTest {
 

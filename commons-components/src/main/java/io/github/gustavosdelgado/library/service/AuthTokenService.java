@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.microauthentication.service;
+package io.github.gustavosdelgado.library.service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

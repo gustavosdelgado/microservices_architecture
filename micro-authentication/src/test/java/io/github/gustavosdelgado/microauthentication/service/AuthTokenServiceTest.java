@@ -11,6 +11,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import io.github.gustavosdelgado.library.domain.user.Role;
 import io.github.gustavosdelgado.library.domain.user.User;
+import io.github.gustavosdelgado.library.service.AuthTokenService;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthTokenServiceTest {
