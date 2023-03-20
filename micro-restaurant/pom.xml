@@ -71,11 +71,6 @@
 			<artifactId>commons-components</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>io.github.gustavosdelgado</groupId>
-			<artifactId>commons-components</artifactId>
-		</dependency>
-
 		<!-- test scope -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

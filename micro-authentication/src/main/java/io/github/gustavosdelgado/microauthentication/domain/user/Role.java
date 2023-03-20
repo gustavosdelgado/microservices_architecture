@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.library.domain.user;
+package io.github.gustavosdelgado.microauthentication.domain.user;
 
 import org.springframework.security.core.GrantedAuthority;
 

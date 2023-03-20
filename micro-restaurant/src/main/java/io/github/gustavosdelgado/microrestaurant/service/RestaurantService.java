@@ -8,12 +8,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import io.github.gustavosdelgado.library.domain.restaurant.Restaurant;
-import io.github.gustavosdelgado.library.domain.restaurant.RestaurantRepository;
-import io.github.gustavosdelgado.library.domain.user.User;
-import io.github.gustavosdelgado.library.domain.user.UserRepository;
+import io.github.gustavosdelgado.microrestaurant.domain.restaurant.Restaurant;
+import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRepository;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantRequest;
 import io.github.gustavosdelgado.microrestaurant.domain.restaurant.RestaurantResponse;
+import io.github.gustavosdelgado.microrestaurant.domain.user.User;
+import io.github.gustavosdelgado.microrestaurant.domain.user.UserRepository;
 import io.github.gustavosdelgado.microrestaurant.exception.BadRequestException;
 import io.github.gustavosdelgado.microrestaurant.exception.NoDataFoundException;
 import io.github.gustavosdelgado.microrestaurant.exception.UnauthorizedException;

@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import io.github.gustavosdelgado.library.domain.user.User;
-import io.github.gustavosdelgado.library.domain.user.UserRepository;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
+import io.github.gustavosdelgado.microauthentication.domain.user.User;
+import io.github.gustavosdelgado.microauthentication.domain.user.UserRepository;
 import io.github.gustavosdelgado.microauthentication.exception.BadRequestException;
 
 @Service

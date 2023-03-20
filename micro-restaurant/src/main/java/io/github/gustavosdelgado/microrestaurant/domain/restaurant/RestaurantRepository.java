@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.library.domain.restaurant;
+package io.github.gustavosdelgado.microrestaurant.domain.restaurant;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

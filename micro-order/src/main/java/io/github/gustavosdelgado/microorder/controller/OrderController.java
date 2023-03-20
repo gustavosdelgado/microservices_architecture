@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.gustavosdelgado.library.controller.Controller;
-import io.github.gustavosdelgado.library.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
+import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
 import io.github.gustavosdelgado.microorder.exception.BadRequestException;
 import io.github.gustavosdelgado.microorder.exception.NotFoundException;
 import io.github.gustavosdelgado.microorder.service.OrderService;

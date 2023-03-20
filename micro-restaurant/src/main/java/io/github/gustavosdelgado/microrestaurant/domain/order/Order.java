@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.library.domain.order;
+package io.github.gustavosdelgado.microrestaurant.domain.order;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import io.github.gustavosdelgado.library.controller.EntityDomain;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,9 +18,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Order implements EntityDomain {
+public class Order {
 
-    public Order(Long orderId, Long restaurantId) {
+    public Order(String orderId, String restaurantId) {
         this.orderId = orderId;
         this.restaurantId = restaurantId;
     }
@@ -31,14 +30,9 @@ public class Order implements EntityDomain {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private Long orderId;
+    private String orderId;
 
     @Column(nullable = false)
-    private Long restaurantId;
-
-    @Override
-    public OrderWebResponse adaptToWebResponse() {
-        return new OrderWebResponse(this.orderId, this.restaurantId);
-    }
+    private String restaurantId;
 
 }

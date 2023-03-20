@@ -9,8 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import io.github.gustavosdelgado.library.domain.user.Role;
-import io.github.gustavosdelgado.library.domain.user.User;
+import io.github.gustavosdelgado.microauthentication.domain.user.Role;
+import io.github.gustavosdelgado.microauthentication.domain.user.User;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthTokenServiceTest {
