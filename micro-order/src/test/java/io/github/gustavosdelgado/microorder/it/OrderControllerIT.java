@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebRequest;
 import io.github.gustavosdelgado.microorder.domain.order.OrderWebResponse;
-import io.github.gustavosdelgado.microorder.it.base.AuthTokenService;
+import io.github.gustavosdelgado.microorder.it.base.AuthTokenServiceIT;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -33,7 +33,7 @@ public class OrderControllerIT {
     private static final int EXPIRATION_TIME = 60;
 
     @Autowired
-    private AuthTokenService tokenService;
+    private AuthTokenServiceIT tokenService;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -209,6 +209,45 @@ public class OrderControllerIT {
                 OrderWebResponse.class);
 
         assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode());
+    }
+
+    @Test
+    public void givenValidTokenWhenCallToListOrdersThenSucceeds() throws Exception {
+        givenValidTokenWhenCallToOrderThenSucceeds();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
+        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(headers);
+
+        ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.GET, request, String.class);
+
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+    }
+
+    @Test
+    public void givenValidTokenWhenCallToDeleteOrderThenSucceeds() throws Exception {
+        givenValidTokenWhenCallToOrderThenSucceeds();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
+        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(headers);
+
+        ResponseEntity<String> exchange = restTemplate.exchange("/order/1", HttpMethod.DELETE, request, String.class);
+
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+    }
+
+    @Test
+    public void givenValidTokenWhenCallToUpdateOrderThenSucceeds() throws Exception {
+        givenValidTokenWhenCallToOrderThenSucceeds();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
+        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(headers);
+
+        ResponseEntity<String> exchange = restTemplate.exchange("/order/1", HttpMethod.PUT, request, String.class);
+
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
     }
 
 }

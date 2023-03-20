@@ -1,18 +1,20 @@
 package io.github.gustavosdelgado.microorder.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,9 +37,6 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
     private static final String CONSUMER_ROLE = "ROLE_CONSUMER";
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
     private OrderService service;
 
     @Autowired
@@ -53,7 +52,6 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
             }
 
             service.create(request);
-            rabbitTemplate.convertAndSend("order.exchange", "", request);
 
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -89,22 +87,67 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
 
     }
 
-    @Override
-    public ResponseEntity<Page<OrderWebResponse>> list(Pageable pageable, String token) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'list'");
+    @GetMapping
+    public ResponseEntity<List<OrderWebResponse>> list(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            Pageable pageable) {
+
+        try {
+            if (!isAuthorized(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            List<OrderWebResponse> list = service.list(pageable);
+            return ResponseEntity.ok(list);
+
+        } catch (NoDataFoundException e) {
+            logger.error("Fail to get order", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        } catch (Exception e) {
+            logger.error("Fail to get order", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
-    @Override
-    public ResponseEntity<OrderWebResponse> delete(String token, Long entityId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    @DeleteMapping("{orderId}")
+    public ResponseEntity<OrderWebResponse> delete(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @PathVariable Long orderId) {
+
+        try {
+            if (!isAuthorized(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            service.removeById(orderId);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            logger.error("Fail to get order", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
-    @Override
-    public ResponseEntity<OrderWebResponse> update(String token, Long entityId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    @PutMapping("/orderId")
+    public ResponseEntity<OrderWebResponse> update(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @Validated @RequestBody OrderWebRequest request, @PathVariable Long orderId) {
+        try {
+            if (!isAuthorized(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            OrderWebResponse response = service.update(orderId, request);
+            return ResponseEntity.ok(response);
+
+        } catch (NoDataFoundException e) {
+            logger.error("Fail to get order", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        } catch (Exception e) {
+            logger.error("Fail to get order", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
 @Service
-public class AuthTokenService {
+public class AuthTokenServiceIT {
 
     public String generateToken(String secret, int expirationTime, String role) {
         try {

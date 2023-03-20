@@ -1,9 +1,9 @@
 package io.github.gustavosdelgado.library.controller;
 
-import org.springframework.data.domain.Page;
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * The <code>Controller</code> is an interface created to enforce a
@@ -27,7 +27,6 @@ public interface Controller<R extends WebRequest, S extends WebResponse> {
      * @return
      *         must return the created entity.
      */
-    @PostMapping
     public ResponseEntity<S> create(String token, R request);
 
     /**
@@ -55,7 +54,7 @@ public interface Controller<R extends WebRequest, S extends WebResponse> {
      * @return
      *         must return the queried entity list, if available.
      */
-    public ResponseEntity<Page<S>> list(Pageable pageable, String token);
+    public ResponseEntity<List<S>> list(String token, Pageable pageable);
 
     /**
      * Entity update API endpoint. Must pass a JWT token in order to authorise the
@@ -68,7 +67,7 @@ public interface Controller<R extends WebRequest, S extends WebResponse> {
      * @return
      *         must return the updated entity, if available.
      */
-    public ResponseEntity<S> update(String token, Long entityId);
+    public ResponseEntity<S> update(String token, R request, Long entityId);
 
     /**
      * Entity removal API endpoint. Must pass a JWT token in order to authorise the

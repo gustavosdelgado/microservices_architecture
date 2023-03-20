@@ -30,7 +30,7 @@ public class CucumberSteps {
 
     @Given("a valid restaurant user")
     public void a_valid_restaurant_user() {
-        HttpEntity<String> request = new HttpEntity<>(buildRequestBody("restaurant", "12456", "ROLE_RESTAURANT"),
+        HttpEntity<String> request = new HttpEntity<>(buildRequestBody("restaurant", "123456", "ROLE_RESTAURANT"),
                 headers);
         response = restTemplate.postForEntity("http://localhost:8080/user", request,
                 String.class);
@@ -41,7 +41,7 @@ public class CucumberSteps {
 
     @Given("a valid consumer user")
     public void a_valid_consumer_user() {
-        HttpEntity<String> request = new HttpEntity<>(buildRequestBody("consumer", "12456", "ROLE_CONSUMER"),
+        HttpEntity<String> request = new HttpEntity<>(buildRequestBody("consumer", "123456", "ROLE_CONSUMER"),
                 headers);
         response = restTemplate.postForEntity("http://localhost:8080/user", request,
                 String.class);
