@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import io.github.gustavosdelgado.library.domain.order.Order;
 import io.github.gustavosdelgado.library.domain.order.OrderRepository;
@@ -26,6 +27,9 @@ public class OrderServiceTest {
 
     @Mock
     private OrderRepository mockRepository;
+
+    @Mock
+    private RabbitTemplate rabbitTemplate;
 
     @InjectMocks
     private OrderService service;

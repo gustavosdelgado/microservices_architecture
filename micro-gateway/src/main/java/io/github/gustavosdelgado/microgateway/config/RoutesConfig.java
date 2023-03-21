@@ -27,6 +27,12 @@ public class RoutesConfig {
 								.circuitBreaker(config -> config
 										.setName("restaurant_cb")))
 						.uri(uriConfiguration.getRestaurantUri()))
+				.route("order_command", p -> p
+						.path("/order/**")
+						.filters(f -> f.rewritePath("/order/(?<segment>.*)", "/order/${segment}")
+								.circuitBreaker(config -> config
+										.setName("order_cb")))
+						.uri(uriConfiguration.getOrderUri()))
 				.route("order_query", p -> p
 						.path("/order")
 						.filters(f -> f.circuitBreaker(config -> config

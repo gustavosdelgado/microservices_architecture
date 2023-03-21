@@ -64,7 +64,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{oderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<OrderWebResponse> get(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
             @PathVariable Long orderId) {
 
@@ -129,7 +129,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
 
     }
 
-    @PutMapping("/orderId")
+    @PutMapping("/{orderId}")
     public ResponseEntity<OrderWebResponse> update(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @Validated @RequestBody OrderWebRequest request, @PathVariable Long orderId) {
         try {
