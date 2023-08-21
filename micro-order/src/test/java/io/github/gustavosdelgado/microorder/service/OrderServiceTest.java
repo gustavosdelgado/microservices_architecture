@@ -36,7 +36,7 @@ public class OrderServiceTest {
 
     @Test
     void testCreate() throws BadRequestException {
-        OrderWebRequest request = new OrderWebRequest(12345L, 54321L);
+        OrderWebRequest request = new OrderWebRequest(54321L);
         service.create(request);
 
         verify(mockRepository).save(any());

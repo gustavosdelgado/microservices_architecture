@@ -51,7 +51,7 @@ public class OrderControllerIT {
     public void givenValidTokenWhenCallToOrderThenSucceeds() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(new OrderWebRequest(12345L, 54321L),
+        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(new OrderWebRequest(54321L),
                 headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
@@ -65,7 +65,7 @@ public class OrderControllerIT {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(12345L, 54321L), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L), headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
 
@@ -76,7 +76,7 @@ public class OrderControllerIT {
     public void givenInvalidTokenWhenCallToOrderThenFails() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken("invalidSecret", EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(12345L, 54321L), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L), headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
 
@@ -87,7 +87,7 @@ public class OrderControllerIT {
     public void givenExpiredTokenWhenCallToOrderThenFails() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, 1, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(12345L, 54321L), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L), headers);
 
         Thread.sleep(5000);
 
@@ -100,7 +100,7 @@ public class OrderControllerIT {
     public void givenInvalidRoleWhenCallToOrderThenFails() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, 60, "invalidRole"));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(12345L, 54321L), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L), headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
 
@@ -108,32 +108,10 @@ public class OrderControllerIT {
     }
 
     @Test
-    public void givenNullOrderIdWhenCallToOrderThenFails() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(null, 54321L), headers);
-
-        ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
-
-        assertEquals(HttpStatus.BAD_REQUEST, exchange.getStatusCode());
-    }
-
-    @Test
     public void givenNullRestaurantIdWhenCallToOrderThenFails() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(12345L, null), headers);
-
-        ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
-
-        assertEquals(HttpStatus.BAD_REQUEST, exchange.getStatusCode());
-    }
-
-    @Test
-    public void givenNullRestaurantIdAndNullOrderIdWhenCallToOrderThenFails() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(null, null), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(null), headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
 
@@ -245,7 +223,7 @@ public class OrderControllerIT {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(new OrderWebRequest(6996L, 808L),
+        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(new OrderWebRequest(808L),
                 headers);
 
         ResponseEntity<OrderWebResponse> exchange = restTemplate.exchange("/order/1", HttpMethod.PUT, request,

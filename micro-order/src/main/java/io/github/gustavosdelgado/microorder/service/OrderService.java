@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -30,11 +31,13 @@ public class OrderService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void create(OrderWebRequest request) throws BadRequestException {
-        Order order = new Order(request.orderId(), request.restaurantId());
+    public OrderWebResponse create(OrderWebRequest request) throws BadRequestException {
+        Order order = new Order(Long.getLong(RandomStringUtils.randomNumeric(16)), request.restaurantId());
         try {
             repository.save(order);
             rabbitTemplate.convertAndSend("order.exchange", "", request);
+
+            return new OrderWebResponse(order.getOrderId(), order.getRestaurantId());
         } catch (Exception e) {
             logger.error("Fail to create order: ", e);
             throw new BadRequestException(e);
@@ -44,7 +47,7 @@ public class OrderService {
     public OrderWebResponse get(Long orderId) throws NoDataFoundException {
         Optional<Order> optional = repository.findByOrderId(orderId);
 
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             throw new NoDataFoundException("Order not found");
         }
 
@@ -74,13 +77,12 @@ public class OrderService {
     public OrderWebResponse update(Long orderId, OrderWebRequest request) throws NoDataFoundException {
         Optional<Order> optional = repository.findById(orderId);
 
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             throw new NoDataFoundException("Order not found");
         }
 
         Order order = optional.get();
 
-        order.setOrderId(request.orderId());
         order.setRestaurantId(request.restaurantId());
 
         repository.save(order);
