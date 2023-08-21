@@ -27,7 +27,7 @@ public class RestaurantService {
     @Autowired
     private UserRepository userRepository;
 
-    public void create(RestaurantRequest request, Long userId) throws BadRequestException {
+    public RestaurantResponse create(RestaurantRequest request, Long userId) throws BadRequestException {
         try {
             Optional<User> o = userRepository.findById(userId);
             if (o.isEmpty()) {
@@ -35,7 +35,8 @@ public class RestaurantService {
             }
 
             Restaurant restaurant = new Restaurant(request.name(), Arrays.asList(o.get()));
-            restaurantRepository.save(restaurant);
+            restaurant = restaurantRepository.save(restaurant);
+            return new RestaurantResponse(restaurant.getName(), restaurant.getId());
 
         } catch (DataAccessException e) {
             throw new BadRequestException(e);
@@ -53,7 +54,7 @@ public class RestaurantService {
 
         for (User user : restaurant.getUsers()) {
             if (user.getId().compareTo(userId) == 0) {
-                return new RestaurantResponse(restaurant.getName());
+                return new RestaurantResponse(restaurant.getName(), restaurant.getId());
             }
         }
 

@@ -32,7 +32,7 @@ public class OrderService {
     private RabbitTemplate rabbitTemplate;
 
     public OrderWebResponse create(OrderWebRequest request) throws BadRequestException {
-        Order order = new Order(Long.getLong(RandomStringUtils.randomNumeric(16)), request.restaurantId());
+        Order order = new Order(Long.parseLong(RandomStringUtils.randomNumeric(16)), request.restaurantId());
         try {
             repository.save(order);
             rabbitTemplate.convertAndSend("order.exchange", "", request);

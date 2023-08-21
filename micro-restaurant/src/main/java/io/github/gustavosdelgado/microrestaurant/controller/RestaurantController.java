@@ -1,5 +1,6 @@
 package io.github.gustavosdelgado.microrestaurant.controller;
 
+import io.github.gustavosdelgado.library.domain.restaurant.Restaurant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +39,15 @@ public class RestaurantController {
     private RestaurantService restaurantService;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
+    public ResponseEntity<RestaurantResponse> create(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
             @Validated @RequestBody RestaurantRequest request) {
         try {
             if (!isAuthorized(authorizationToken)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            restaurantService.create(request, tokenService.getUserId(authorizationToken));
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(restaurantService.create(request, tokenService.getUserId(authorizationToken)));
 
         } catch (BadRequestException e) {
             logger.error("Fail to create Restaurant Entity", e);

@@ -51,7 +51,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            return ResponseEntity.ok(service.create(request));
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
 
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

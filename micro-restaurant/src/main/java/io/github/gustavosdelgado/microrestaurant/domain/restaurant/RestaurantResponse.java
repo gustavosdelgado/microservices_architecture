@@ -12,5 +12,7 @@ import lombok.Setter;
 public class RestaurantResponse {
 
     private String name;
+
+    private Long id;
     
 }
