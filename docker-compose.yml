@@ -34,6 +34,8 @@ services:
   auth:
     depends_on:
       - mysqldb-auth
+      - order
+      - restaurant
     build: 
       context: ./micro-authentication
       target: development
@@ -48,8 +50,7 @@ services:
       - auth
       - restaurant
       - order
-      - rabbitmq
-    build: 
+    build:
       context: ./micro-gateway
       target: development
     env_file: ./.env
@@ -61,7 +62,10 @@ services:
       - ./logs:/root/logs
   restaurant:
     depends_on:
-      - mysqldb-restaurant
+      mysqldb-restaurant:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     build: 
       context: ./micro-restaurant
       target: development
@@ -73,7 +77,10 @@ services:
       - ./logs:/root/logs
   order:
     depends_on:
-      - mysqldb-order
+      mysqldb-order:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     build: 
       context: ./micro-order
       target: development
@@ -90,11 +97,16 @@ services:
       ports:
           - 15672:15672
       volumes:
-          - ./dados:/var/lib/rabbitmq/
+          - ./dados:/var/lib/rabbitmq/mnesia
       environment:
           - RABBITMQ_DEFAULT_USER=$RABBITMQ_USER
           - RABBITMQ_DEFAULT_PASS=$RABBITMQ_PASSOWRD
           - TZ=America/Sao_Paulo
+      healthcheck:
+        test: rabbitmq-diagnostics -q ping
+        interval: 30s
+        timeout: 30s
+        retries: 3
 
 volumes:
   db-auth:
