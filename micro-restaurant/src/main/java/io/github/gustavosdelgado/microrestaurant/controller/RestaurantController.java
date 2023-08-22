@@ -1,6 +1,7 @@
 package io.github.gustavosdelgado.microrestaurant.controller;
 
 import io.github.gustavosdelgado.library.domain.restaurant.Restaurant;
+import io.github.gustavosdelgado.library.domain.user.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,6 @@ import io.github.gustavosdelgado.microrestaurant.service.RestaurantService;
 public class RestaurantController {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private static final String RESTAURANT_ROLE = "ROLE_RESTAURANT";
 
     @Autowired
     private AuthTokenService tokenService;
@@ -90,7 +89,7 @@ public class RestaurantController {
 
     private boolean isAuthorized(String token) {
         String role = tokenService.getRole(token);
-        return RESTAURANT_ROLE.equals(role);
+        return Role.ROLE_RESTAURANT.name().equals(role);
     }
 
 }

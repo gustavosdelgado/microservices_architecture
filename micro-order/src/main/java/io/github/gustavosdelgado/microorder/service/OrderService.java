@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.github.gustavosdelgado.library.domain.order.OrderStatus;
+import io.github.gustavosdelgado.library.domain.restaurant.Restaurant;
+import io.github.gustavosdelgado.library.domain.restaurant.RestaurantRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +29,29 @@ public class OrderService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private OrderRepository repository;
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     public OrderWebResponse create(OrderWebRequest request) throws BadRequestException {
-        Order order = new Order(Long.parseLong(RandomStringUtils.randomNumeric(16)), request.restaurantId());
-        try {
-            repository.save(order);
-            rabbitTemplate.convertAndSend("order.exchange", "", request);
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(request.restaurantId());
 
-            return new OrderWebResponse(order.getOrderId(), order.getRestaurantId());
+        try {
+            if (restaurantOptional.isEmpty()) {
+                throw new NoDataFoundException("Restaurant not found");
+            }
+
+            Restaurant restaurant = restaurantOptional.get();
+            Order order = new Order(Long.parseLong(RandomStringUtils.randomNumeric(16)),
+                    restaurant, OrderStatus.CONFIRMATION_PENDING);
+            orderRepository.save(order);
+            rabbitTemplate.convertAndSend("order.exchange", "", order);
+
+            return new OrderWebResponse(order.getOrderId(), order.getRestaurant().getId());
         } catch (Exception e) {
             logger.error("Fail to create order: ", e);
             throw new BadRequestException(e);
@@ -45,7 +59,7 @@ public class OrderService {
     }
 
     public OrderWebResponse get(Long orderId) throws NoDataFoundException {
-        Optional<Order> optional = repository.findByOrderId(orderId);
+        Optional<Order> optional = orderRepository.findByOrderId(orderId);
 
         if (optional.isEmpty()) {
             throw new NoDataFoundException("Order not found");
@@ -53,11 +67,11 @@ public class OrderService {
 
         Order order = optional.get();
 
-        return new OrderWebResponse(order.getOrderId(), order.getRestaurantId());
+        return new OrderWebResponse(order.getOrderId(), order.getRestaurant().getId());
     }
 
     public List<OrderWebResponse> list(Pageable pageable) throws NoDataFoundException {
-        Page<Order> orders = repository.findAll(pageable);
+        Page<Order> orders = orderRepository.findAll(pageable);
 
         if (!orders.hasContent()) {
             throw new NoDataFoundException("Order not found");
@@ -66,28 +80,26 @@ public class OrderService {
         List<Order> content = orders.getContent();
 
         return content.stream()
-                .map(c -> new OrderWebResponse(c.getOrderId(), c.getRestaurantId()))
+                .map(c -> new OrderWebResponse(c.getOrderId(), c.getRestaurant().getId()))
                 .collect(Collectors.toList());
     }
 
     public void removeById(Long orderId) {
-        repository.deleteById(orderId);
+        orderRepository.deleteById(orderId);
     }
 
     public OrderWebResponse update(Long orderId, OrderWebRequest request) throws NoDataFoundException {
-        Optional<Order> optional = repository.findById(orderId);
+        Optional<Order> optional = orderRepository.findById(orderId);
 
         if (optional.isEmpty()) {
             throw new NoDataFoundException("Order not found");
         }
 
         Order order = optional.get();
+        order.setOrderStatus(request.orderStatus());
+        orderRepository.save(order);
 
-        order.setRestaurantId(request.restaurantId());
-
-        repository.save(order);
-
-        return new OrderWebResponse(order.getOrderId(), order.getRestaurantId());
+        return new OrderWebResponse(order.getOrderId(), order.getRestaurant().getId());
     }
 
 }

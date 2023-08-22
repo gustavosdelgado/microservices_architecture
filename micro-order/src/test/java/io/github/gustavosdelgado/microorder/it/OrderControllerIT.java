@@ -2,6 +2,7 @@ package io.github.gustavosdelgado.microorder.it;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.github.gustavosdelgado.library.domain.order.OrderStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -51,7 +52,7 @@ public class OrderControllerIT {
     public void givenValidTokenWhenCallToOrderThenSucceeds() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(new OrderWebRequest(54321L),
+        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(new OrderWebRequest(54321L, OrderStatus.CONFIRMATION_PENDING),
                 headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
@@ -65,7 +66,7 @@ public class OrderControllerIT {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L, OrderStatus.CONFIRMATION_PENDING), headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
 
@@ -76,7 +77,7 @@ public class OrderControllerIT {
     public void givenInvalidTokenWhenCallToOrderThenFails() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken("invalidSecret", EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L, OrderStatus.CONFIRMATION_PENDING), headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
 
@@ -87,7 +88,7 @@ public class OrderControllerIT {
     public void givenExpiredTokenWhenCallToOrderThenFails() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, 1, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L, OrderStatus.CONFIRMATION_PENDING), headers);
 
         Thread.sleep(5000);
 
@@ -100,7 +101,7 @@ public class OrderControllerIT {
     public void givenInvalidRoleWhenCallToOrderThenFails() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, 60, "invalidRole"));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(54321L, OrderStatus.CONFIRMATION_PENDING), headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
 
@@ -111,7 +112,7 @@ public class OrderControllerIT {
     public void givenNullRestaurantIdWhenCallToOrderThenFails() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(null), headers);
+        HttpEntity<OrderWebRequest> request = new HttpEntity<>(new OrderWebRequest(null, OrderStatus.CONFIRMATION_PENDING), headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange("/order", HttpMethod.POST, request, String.class);
 
@@ -223,7 +224,7 @@ public class OrderControllerIT {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", tokenService.generateToken(secret, EXPIRATION_TIME, ROLE_CONSUMER));
-        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(new OrderWebRequest(808L),
+        HttpEntity<OrderWebRequest> request = new HttpEntity<OrderWebRequest>(new OrderWebRequest(808L, OrderStatus.CONFIRMATION_PENDING),
                 headers);
 
         ResponseEntity<OrderWebResponse> exchange = restTemplate.exchange("/order/1", HttpMethod.PUT, request,

@@ -10,15 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import io.github.gustavosdelgado.library.domain.order.Order;
 import io.github.gustavosdelgado.library.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Table(name = "restaurant")
 @Entity(name = "Restaurant")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -40,8 +39,8 @@ public class Restaurant {
     @Column(nullable = false)
     private List<User> users;
 
-    // @OneToMany
-    // @Column(nullable = false)
-    // private List<Order> orders;
+    @OneToMany
+    @Column(nullable = false)
+    private List<Order> orders;
 
 }

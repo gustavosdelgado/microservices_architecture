@@ -2,6 +2,7 @@ package io.github.gustavosdelgado.microorder.controller;
 
 import java.util.List;
 
+import io.github.gustavosdelgado.library.domain.user.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,6 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private static final String CONSUMER_ROLE = "ROLE_CONSUMER";
-
     @Autowired
     private OrderService service;
 
@@ -47,7 +46,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
             @Validated @RequestBody OrderWebRequest request) {
 
         try {
-            if (!isAuthorized(authorizationToken)) {
+            if (!isConsumer(authorizationToken)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
@@ -91,7 +90,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
             Pageable pageable) {
 
         try {
-            if (!isAuthorized(token)) {
+            if (!isRestaurant(token)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
@@ -114,7 +113,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
             @PathVariable Long orderId) {
 
         try {
-            if (!isAuthorized(token)) {
+            if (!isRestaurant(token)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
@@ -132,7 +131,7 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
     public ResponseEntity<OrderWebResponse> update(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @Validated @RequestBody OrderWebRequest request, @PathVariable Long orderId) {
         try {
-            if (!isAuthorized(token)) {
+            if (!isRestaurant(token)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
@@ -152,7 +151,17 @@ public class OrderController implements Controller<OrderWebRequest, OrderWebResp
     @Override
     public boolean isAuthorized(String token) {
         String role = tokenService.getRole(token);
-        return CONSUMER_ROLE.equals(role);
+        return Role.ROLE_CONSUMER.name().equals(role);
+    }
+
+    public boolean isConsumer(String token) {
+        String role = tokenService.getRole(token);
+        return Role.ROLE_CONSUMER.name().equals(role);
+    }
+
+    public boolean isRestaurant(String token) {
+        String role = tokenService.getRole(token);
+        return Role.ROLE_RESTAURANT.name().equals(role);
     }
 
 }

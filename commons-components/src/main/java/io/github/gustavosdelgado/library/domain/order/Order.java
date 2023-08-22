@@ -1,12 +1,8 @@
 package io.github.gustavosdelgado.library.domain.order;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import io.github.gustavosdelgado.library.domain.restaurant.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,9 +18,10 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "id")
 public class Order {
 
-    public Order(Long orderId, Long restaurantId) {
+    public Order(Long orderId, Restaurant restaurant, OrderStatus orderStatus) {
         this.orderId = orderId;
-        this.restaurantId = restaurantId;
+        this.restaurant = restaurant;
+        this.orderStatus = orderStatus;
     }
 
     @Id
@@ -34,7 +31,11 @@ public class Order {
     @Column(unique = true, nullable = false)
     private Long orderId;
 
+    @ManyToOne(optional = false)
+    private Restaurant restaurant;
+
     @Column(nullable = false)
-    private Long restaurantId;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
 }

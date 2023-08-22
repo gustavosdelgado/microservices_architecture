@@ -48,4 +48,20 @@ public class OrderAMQP implements AMQP {
     public Binding bindUserCreated(FanoutExchange exhange) {
         return BindingBuilder.bind(createUserCreatedQueue()).to(userExchange());
     }
+
+    @Bean
+    public Queue createRestaurantCreatedQueue() {
+        return QueueBuilder.durable("restaurant.created-order").build();
+    }
+
+    @Bean
+    @Qualifier("restaurant.exchange")
+    public FanoutExchange restaurantExchange() {
+        return ExchangeBuilder.fanoutExchange("restaurant.exchange").build();
+    }
+
+    @Bean
+    public Binding bindRestaurantCreated(FanoutExchange exhange) {
+        return BindingBuilder.bind(createRestaurantCreatedQueue()).to(restaurantExchange());
+    }
 }
