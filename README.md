@@ -22,7 +22,7 @@
 ## 3. Documentation
 
 ## 3.1 Request examples
-You can check some request examples in this [Postman Collection](https://api.postman.com/collections/10256967-717c51cd-7e4a-4840-9fad-d4aef4c109ef?access_key=PMAT-01H8DECAWYFA1SAY4GP3MT6C3T)
+You can check some request examples in this [Postman Collection](doc/microservices_architecture.postman_collection.json)
 
 ## 3.2 Diagram
 
