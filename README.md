@@ -33,7 +33,6 @@ You can check some request examples in this [Postman Collection](doc/microservic
  - OpenJDK 17;
  - Spring Gateway;
  - Spring Security
- - Spring Webflux;
  - RabbitMQ
  - MySQL 5.7;
  - Cucumber + Gherkin
