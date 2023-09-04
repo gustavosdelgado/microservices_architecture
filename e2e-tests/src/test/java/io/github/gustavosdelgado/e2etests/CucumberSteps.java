@@ -2,6 +2,7 @@ package io.github.gustavosdelgado.e2etests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -53,7 +54,7 @@ public class CucumberSteps {
     @When("user places an order")
     public void user_places_an_order() {
         headers.add("Authorization", "Bearer " + token);
-        HttpEntity<String> request = new HttpEntity<>("{\"orderId\":\"1234\", \"restaurantId\":\"1\"}",
+        HttpEntity<String> request = new HttpEntity<>("{\"restaurantId\":\"1\"}",
                 headers);
         response = restTemplate.postForEntity("http://localhost:8080/order", request,
                 String.class);
@@ -74,7 +75,7 @@ public class CucumberSteps {
     }
 
     private String buildRequestBody(String login, String password, String role) {
-        return "{\"login\":\"" + login + "\",\"password\":\"" + password + "\",\"role\": \"" + role + "\"}";
+        return "{\"login\":\"" + login + RandomStringUtils.randomNumeric(3) +  "\",\"password\":\"" + password + "\",\"role\": \"" + role + "\"}";
     }
 
 }

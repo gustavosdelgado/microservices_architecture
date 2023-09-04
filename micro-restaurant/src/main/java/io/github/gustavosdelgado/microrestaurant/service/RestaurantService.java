@@ -53,7 +53,7 @@ public class RestaurantService {
 
     public RestaurantResponse get(Long id, Long userId) throws NoDataFoundException, UnauthorizedException {
         Optional<Restaurant> rOptional = restaurantRepository.findById(id);
-        if (!rOptional.isPresent()) {
+        if (rOptional.isEmpty()) {
             throw new NoDataFoundException("Restaurant not found");
         }
 

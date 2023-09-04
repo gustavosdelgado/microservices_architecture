@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 
 FROM eclipse-temurin:17-jdk-jammy as development
-ENV TZ="America/Sao_Paulo"
 
 USER root
 WORKDIR /app

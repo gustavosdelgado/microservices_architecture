@@ -2,6 +2,7 @@ package io.github.gustavosdelgado.library.domain.user;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,7 +54,7 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(role);
+        return Collections.singletonList(role);
     }
 
     public Role getRole() {

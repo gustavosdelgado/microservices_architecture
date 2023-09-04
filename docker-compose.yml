@@ -8,7 +8,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - MYSQLDB_DATABASE=$MYSQLDB_AUTH_DATABASE
-      - TZ=America/Sao_Paulo
+      - TZ=Australia/Sydney
     volumes:
       - db-auth:/var/lib/mysql
   mysqldb-restaurant:
@@ -18,7 +18,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - MYSQLDB_DATABASE=$MYSQLDB_RESTAURANT_DATABASE
-      - TZ=America/Sao_Paulo
+      - TZ=Australia/Sydney
     volumes:
       - db-restaurant:/var/lib/mysql
   mysqldb-order:
@@ -28,7 +28,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - MYSQLDB_DATABASE=$MYSQLDB_ORDER_DATABASE
-      - TZ=America/Sao_Paulo
+      - TZ=Australia/Sydney
     volumes:
       - db-order:/var/lib/mysql
   auth:
@@ -101,7 +101,7 @@ services:
       environment:
           - RABBITMQ_DEFAULT_USER=$RABBITMQ_USER
           - RABBITMQ_DEFAULT_PASS=$RABBITMQ_PASSOWRD
-          - TZ=America/Sao_Paulo
+          - TZ=Australia/Sydney
       healthcheck:
         test: rabbitmq-diagnostics -q ping
         interval: 30s
