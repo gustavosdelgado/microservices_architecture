@@ -1,4 +1,4 @@
-package io.github.gustavosdelgado.service;
+package io.github.gustavosdelgado.library.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.Instant;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,29 +27,32 @@ public class AuthTokenServiceTest {
     private static final String LOGIN = "login";
     private static final String SECRET = "secret";
     private static final String ROLE = "role";
+    public static final long USER_ID = 69L;
 
     @InjectMocks
     private AuthTokenService service;
 
+    @BeforeEach
+    void setup() {
+        ReflectionTestUtils.setField(service, SECRET, SECRET);
+        ReflectionTestUtils.setField(service, "tokenTimeZone", "Australia/Sydney");
+        ReflectionTestUtils.setField(service, "expirationInMinutes", 15);
+    }
+
     @Test
     void givenValidUserWhenGenerateTokenThenSucceed() {
         User user = new User(1L, "login", "password", Role.ROLE_CONSUMER);
-        ReflectionTestUtils.setField(service, "secret", "secret");
-        ReflectionTestUtils.setField(service, "expirationInMinutes", 15);
         assertNotNull(service.gerarToken(user), "Unexpected null return");
     }
 
     @Test
     void givenNullUserWhenGenerateTokenThenFail() {
-        ReflectionTestUtils.setField(service, "secret", "secret");
         assertThrows(RuntimeException.class,
                 () -> service.gerarToken(null), "Expected Exception not thrown");
     }
 
     @Test
     void givenValidTokenWhenGetRoleThenSucceeds() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
         String token = JWT.create()
                 .withIssuer("AuthService")
                 .withSubject(LOGIN)
@@ -61,8 +65,6 @@ public class AuthTokenServiceTest {
 
     @Test
     void givenValidTokenWithDifferentClaimWhenGetRoleThenFails() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
         String token = JWT.create()
                 .withIssuer("AuthService")
                 .withSubject(LOGIN)
@@ -75,8 +77,6 @@ public class AuthTokenServiceTest {
 
     @Test
     void givenValidTokenWithDifferentSecretWhenGetRoleThenFails() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
         String token = JWT.create()
                 .withIssuer("AuthService")
                 .withSubject(LOGIN)
@@ -89,8 +89,6 @@ public class AuthTokenServiceTest {
 
     @Test
     void givenValidTokenWithDifferentIssuerWhenGetRoleThenFails() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
         String token = JWT.create()
                 .withIssuer("differentIssuer")
                 .withSubject(LOGIN)
@@ -103,8 +101,6 @@ public class AuthTokenServiceTest {
 
     @Test
     void givenTokenWithNoBearerWhenGetRoleThenSucceeds() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
         String token = JWT.create()
                 .withIssuer("AuthService")
                 .withSubject(LOGIN)
@@ -117,71 +113,45 @@ public class AuthTokenServiceTest {
 
     @Test
     void givenNullTokenWhenGetRoleThenFails() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
         assertNull(service.getRole(null), "unexpected role");
-    }
-
-    @Test
-    void givenValidTokenWhenGetUserThenSucceeds() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
-        String token = JWT.create()
-                .withIssuer("AuthService")
-                .withSubject(LOGIN)
-                .withExpiresAt(Instant.now().plusSeconds(60))
-                .withClaim(ROLE, ROLE)
-                .sign(Algorithm.HMAC512(SECRET));
-
-        assertEquals(LOGIN, service.getUser("Bearer " + token), "unexpected user");
-    }
-
-    @Test
-    void givenValidTokenWithDifferentSecretWhenGetUserThenFails() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
-        String token = JWT.create()
-                .withIssuer("AuthService")
-                .withSubject(LOGIN)
-                .withExpiresAt(Instant.now().plusSeconds(60))
-                .withClaim(ROLE, ROLE)
-                .sign(Algorithm.HMAC512("differentSecret"));
-
-        assertNull(service.getUser("Bearer " + token), "unexpected role");
-    }
-
-    @Test
-    void givenValidTokenWithDifferentIssuerWhenGetUserThenFails() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
-        String token = JWT.create()
-                .withIssuer("differentIssuer")
-                .withSubject(LOGIN)
-                .withExpiresAt(Instant.now().plusSeconds(60))
-                .withClaim(ROLE, ROLE)
-                .sign(Algorithm.HMAC512(SECRET));
-
-        assertNull(service.getUser("Bearer " + token), "unexpected user");
-    }
-
-    @Test
-    void givenTokenWithNoBearerWhenGetUserThenSucceeds() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
-        String token = JWT.create()
-                .withIssuer("AuthService")
-                .withSubject(LOGIN)
-                .withExpiresAt(Instant.now().plusSeconds(60))
-                .withClaim(ROLE, ROLE)
-                .sign(Algorithm.HMAC512(SECRET));
-
-        assertEquals(LOGIN, service.getUser(token), "unexpected user");
     }
 
     @Test
     void givenNullTokenWhenGetUserThenFails() {
-        ReflectionTestUtils.setField(service, SECRET, SECRET);
-
         assertNull(service.getRole(null), "unexpected role");
     }
+
+    @Test
+    void givenValidTokenWhenGetUserIdThenSucceeds() {
+        String token = JWT.create()
+                .withIssuer("AuthService")
+                .withSubject(LOGIN)
+                .withExpiresAt(Instant.now().plusSeconds(60))
+                .withClaim(ROLE, ROLE)
+                .withClaim("userId", USER_ID)
+                .sign(Algorithm.HMAC512(SECRET));
+
+        assertEquals(USER_ID, service.getUserId(token));
+    }
+
+    @Test
+    void givenInvalidTokenWhenGetUserIdThenSucceeds() {
+        assertNull(service.getUserId("invalidToken"));
+    }
+
+    @Test
+    void givenInvalidTokenTimeZoneWhenGetRoleThenFails() {
+        ReflectionTestUtils.setField(service, "tokenTimeZone", "nowhere");
+
+        String token = JWT.create()
+                .withIssuer("AuthService")
+                .withSubject(LOGIN)
+                .withExpiresAt(Instant.now().plusSeconds(60))
+                .withClaim(ROLE, ROLE)
+                .sign(Algorithm.HMAC512(SECRET));
+
+        assertThrows(Exception.class, () -> service.getRole(token), "Expected invalid time zone");
+    }
+
+
 }

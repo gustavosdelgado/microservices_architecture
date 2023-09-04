@@ -2,7 +2,6 @@ package io.github.gustavosdelgado.e2etests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -75,7 +74,7 @@ public class CucumberSteps {
     }
 
     private String buildRequestBody(String login, String password, String role) {
-        return "{\"login\":\"" + login + RandomStringUtils.randomNumeric(3) +  "\",\"password\":\"" + password + "\",\"role\": \"" + role + "\"}";
+        return "{\"login\":\"" + login + "\",\"password\":\"" + password + "\",\"role\": \"" + role + "\"}";
     }
 
 }

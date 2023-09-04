@@ -2,9 +2,8 @@ package io.github.gustavosdelgado.library.service;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.temporal.TemporalUnit;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +28,9 @@ public class AuthTokenService {
     @Value("${api.security.token.expiration}")
     private int expirationInMinutes;
 
+    @Value("${api.security.token.timezone}")
+    private String tokenTimeZone;
+
     public String gerarToken(User user) {
         try {
             if (user == null)
@@ -38,7 +40,7 @@ public class AuthTokenService {
             return JWT.create()
                     .withIssuer("AuthService")
                     .withSubject(user.getLogin())
-                    .withExpiresAt(dataExpiracao())
+                    .withExpiresAt(calculateExpirationTime())
                     .withClaim("role", user.getRole().name())
                     .withClaim("userId", user.getId())
                     .sign(algoritmo);
@@ -50,15 +52,6 @@ public class AuthTokenService {
     public String getRole(String tokenJWT) {
         try {
             return decodeJwt(tokenJWT).getClaim("role").asString();
-        } catch (JWTVerificationException exception) {
-            LoggerFactory.getLogger(getClass()).error("Fail to verify token: ", exception);
-            return null;
-        }
-    }
-
-    public String getUser(String tokenJWT) {
-        try {
-            return decodeJwt(tokenJWT).getSubject();
         } catch (JWTVerificationException exception) {
             LoggerFactory.getLogger(getClass()).error("Fail to verify token: ", exception);
             return null;
@@ -82,11 +75,11 @@ public class AuthTokenService {
         var algoritmo = Algorithm.HMAC512(secret);
         BaseVerification verification = (BaseVerification) JWT.require(algoritmo)
                 .withIssuer("AuthService");
-        JWTVerifier verifier = verification.build(Clock.system(ZoneId.of("America/Sao_Paulo")));
+        JWTVerifier verifier = verification.build(Clock.system(ZoneId.of(tokenTimeZone)));
         return verifier.verify(tokenJWT);
     }
 
-    private Instant dataExpiracao() {
-        return LocalDateTime.now().plusMinutes(expirationInMinutes).toInstant(ZoneOffset.of("-03:00"));
+    private Instant calculateExpirationTime() {
+        return Clock.system(ZoneId.of(tokenTimeZone)).instant().plusSeconds(expirationInMinutes * 60);
     }
 }
