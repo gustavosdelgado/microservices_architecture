@@ -22,9 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import io.github.gustavosdelgado.library.domain.user.Role;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc(addFilters = false)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuthenticationControllerIT {
 
@@ -57,7 +55,7 @@ public class AuthenticationControllerIT {
         ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
                 new AuthenticationRequest("gustavosd", "invalidPassword", null), String.class);
 
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
@@ -65,7 +63,7 @@ public class AuthenticationControllerIT {
         ResponseEntity<String> response = restTemplate.postForEntity("/authenticate",
                 new AuthenticationRequest("invalidUsername", "invalidPassword", null), String.class);
 
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test

@@ -1,20 +1,23 @@
 package io.github.gustavosdelgado.microauthentication.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doReturn;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
+import io.github.gustavosdelgado.library.exception.BadRequestException;
+import io.github.gustavosdelgado.library.exception.NoDataFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 
 import io.github.gustavosdelgado.library.domain.user.Role;
 import io.github.gustavosdelgado.library.service.AuthTokenService;
 import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
+import org.springframework.security.core.Authentication;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceTest {
@@ -30,13 +33,32 @@ public class AuthenticationServiceTest {
     private AuthenticationService service;
 
     @Test
-    void testGenerateToken() {
+    void givenValidRequestWhenGenerateTokenThenSucceeds() throws BadRequestException, NoDataFoundException {
         AuthenticationRequest request = new AuthenticationRequest("login",
                 "password", Role.ROLE_CONSUMER);
         UsernamePasswordAuthenticationToken passwordToken = new UsernamePasswordAuthenticationToken(request, request);
         doReturn(passwordToken).when(service).createUsernamePasswordAuthToken(request);
         doReturn("jwt").when(service).generateJwt(passwordToken);
         assertEquals("jwt", service.generateToken(request), "not expected return");
+    }
+
+    @Test
+    void givenInvalidRequestWhenGenerateTokenThenThrowsAuthenticationException() {
+        AuthenticationRequest request = new AuthenticationRequest("login",
+                "password", Role.ROLE_CONSUMER);
+        UsernamePasswordAuthenticationToken passwordToken = new UsernamePasswordAuthenticationToken(request, request);
+        doThrow(InternalAuthenticationServiceException.class).when(service).createUsernamePasswordAuthToken(request);
+        assertThrows(BadRequestException.class, () -> service.generateToken(request));
+    }
+    @Test
+    void givenInvalidRequestWhenGenerateTokenThenThrowsNoDataFoundException() throws NoDataFoundException {
+        AuthenticationRequest request = new AuthenticationRequest("login",
+                "password", Role.ROLE_CONSUMER);
+        UsernamePasswordAuthenticationToken passwordToken = new UsernamePasswordAuthenticationToken(request, request);
+        Authentication auth = new TestingAuthenticationToken(passwordToken.getPrincipal(), passwordToken.getCredentials());
+        when(mockManager.authenticate(any())).thenReturn(auth);
+        doThrow(NoDataFoundException.class).when(mockTokenService).generateToken(any());
+        assertThrows(BadRequestException.class, () -> service.generateToken(request));
     }
 
 }

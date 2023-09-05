@@ -2,6 +2,7 @@ package io.github.gustavosdelgado.microauthentication.controller;
 
 import javax.validation.Valid;
 
+import io.github.gustavosdelgado.library.exception.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,9 @@ public class AuthenticationController {
             String jwt = authService.generateToken(request);
     
             return ResponseEntity.ok(new JwtData(jwt));
-        } catch (RuntimeException e) {
+        } catch (BadRequestException e) {
             logger.error("Authentication failure: ", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         } catch (Exception e) {
             logger.error("Authentication failure: ", e);

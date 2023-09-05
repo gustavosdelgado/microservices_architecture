@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.Instant;
 
+import io.github.gustavosdelgado.library.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 
 import io.github.gustavosdelgado.library.domain.user.Role;
 import io.github.gustavosdelgado.library.domain.user.User;
-import io.github.gustavosdelgado.library.service.AuthTokenService;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthTokenServiceTest {
@@ -40,15 +40,15 @@ public class AuthTokenServiceTest {
     }
 
     @Test
-    void givenValidUserWhenGenerateTokenThenSucceed() {
+    void givenValidUserWhenGenerateTokenThenSucceed() throws NoDataFoundException {
         User user = new User(1L, "login", "password", Role.ROLE_CONSUMER);
-        assertNotNull(service.gerarToken(user), "Unexpected null return");
+        assertNotNull(service.generateToken(user), "Unexpected null return");
     }
 
     @Test
     void givenNullUserWhenGenerateTokenThenFail() {
-        assertThrows(RuntimeException.class,
-                () -> service.gerarToken(null), "Expected Exception not thrown");
+        assertThrows(NoDataFoundException.class,
+                () -> service.generateToken(null), "Expected Exception not thrown");
     }
 
     @Test

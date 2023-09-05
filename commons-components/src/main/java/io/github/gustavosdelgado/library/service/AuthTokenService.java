@@ -3,8 +3,8 @@ package io.github.gustavosdelgado.library.service;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.temporal.TemporalUnit;
 
+import io.github.gustavosdelgado.library.exception.NoDataFoundException;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifier.BaseVerification;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
@@ -31,22 +30,21 @@ public class AuthTokenService {
     @Value("${api.security.token.timezone}")
     private String tokenTimeZone;
 
-    public String gerarToken(User user) {
-        try {
-            if (user == null)
-                throw new JWTCreationException("Null user", new RuntimeException());
+    public String generateToken(Object object) throws NoDataFoundException {
+        User user = (User) object;
 
-            var algoritmo = Algorithm.HMAC512(secret);
-            return JWT.create()
-                    .withIssuer("AuthService")
-                    .withSubject(user.getLogin())
-                    .withExpiresAt(calculateExpirationTime())
-                    .withClaim("role", user.getRole().name())
-                    .withClaim("userId", user.getId())
-                    .sign(algoritmo);
-        } catch (JWTCreationException exception) {
-            throw new RuntimeException("Error creating token", exception);
-        }
+        if (user == null)
+            throw new NoDataFoundException("Token user not found");
+
+        var algoritmo = Algorithm.HMAC512(secret);
+
+        return JWT.create()
+                .withIssuer("AuthService")
+                .withSubject(user.getLogin())
+                .withExpiresAt(calculateExpirationTime())
+                .withClaim("role", user.getRole().name())
+                .withClaim("userId", user.getId())
+                .sign(algoritmo);
     }
 
     public String getRole(String tokenJWT) {

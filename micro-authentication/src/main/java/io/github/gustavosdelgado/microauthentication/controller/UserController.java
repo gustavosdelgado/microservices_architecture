@@ -41,10 +41,6 @@ public class UserController {
             logger.error("User creation failure: ", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
-        } catch (RuntimeException e) {
-            logger.error("User creation failure: ", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
         } catch (Exception e) {
             logger.error("User creation failure: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

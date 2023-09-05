@@ -2,7 +2,7 @@
 
 ## Origin
 
-Command and Query Responsibility Segregation was a term created by Greg Young and became popular among the development community around 2010.
+Command Query Responsibility Segregation was a term created by Greg Young and became popular among the development community around 2010.
 
 It came originally from the CQS (Command-query separation) principle, devised by Bertrant Meyer and states that every method should either be a command that performs a data state alteration or a query that returns data, but never both.
 
