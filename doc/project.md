@@ -1,14 +1,14 @@
 ## Project
 
 - features:
-  - API gateway pattern
-  - decoupled services
-  - data replication
-  - message-oriented
-  - Access token
-    - Gateways handles authentication
-    - each domain service handles authorization
-  - GitHub Actions for continue integration
+    - API gateway pattern
+    - decoupled services
+    - data replication
+    - message-oriented
+    - Access token
+        - Gateways handles authentication
+        - each domain service handles authorization
+    - GitHub Actions for continue integration
 
 - improvements:
     - gateway
@@ -19,11 +19,13 @@
         - try refresh tokens
     - order
         - unit tests
+    - restaurant
+        - unit tests
     - overall:
+        - GitHub actions for code coverage
         - pass environment variables through docker
         - caching
         - observability
-            - APMs
         - create SAGA
         - CQRS
         - gRPC
@@ -35,3 +37,5 @@
         - project not managed by parent project
     - auth
         - auth service should subscribe to user events
+    - order
+        - update, delete and list not working properly

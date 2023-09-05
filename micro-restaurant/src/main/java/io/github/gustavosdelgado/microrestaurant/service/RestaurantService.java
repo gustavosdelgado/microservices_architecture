@@ -38,8 +38,9 @@ public class RestaurantService {
             if (o.isEmpty()) {
                 throw new DataIntegrityViolationException("User not found");
             }
+            User user = o.get();
 
-            Restaurant restaurant = new Restaurant(request.name(), List.of(o.get()));
+            Restaurant restaurant = new Restaurant(request.name(), user);
             restaurant = restaurantRepository.save(restaurant);
 
             rabbitTemplate.convertAndSend("restaurant.exchange", "", restaurant);
@@ -56,13 +57,11 @@ public class RestaurantService {
         if (rOptional.isEmpty()) {
             throw new NoDataFoundException("Restaurant not found");
         }
-
         Restaurant restaurant = rOptional.get();
 
-        for (User user : restaurant.getUsers()) {
-            if (user.getId().compareTo(userId) == 0) {
-                return new RestaurantResponse(restaurant.getName(), restaurant.getId());
-            }
+        User user = restaurant.getUser();
+        if (user.getId().compareTo(userId) == 0) {
+            return new RestaurantResponse(restaurant.getName(), restaurant.getId());
         }
 
         throw new UnauthorizedException("User not related to the restaurant");

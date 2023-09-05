@@ -48,7 +48,7 @@ public class OrderServiceTest {
         when(mockRestaurantRepository.findById(request.restaurantId())).thenReturn(Optional.of(restaurant));
         service.create(request);
 
-        verify(mockRepository).save(any());
+        verify(mockRestaurantRepository).save(any());
         verify(mockRestaurantRepository).findById(request.restaurantId());
 
         verifyNoMoreInteractions(mockRepository, mockRestaurantRepository);

@@ -31,7 +31,8 @@ public class Order {
     @Column(unique = true, nullable = false)
     private Long orderId;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     @Column(nullable = false)

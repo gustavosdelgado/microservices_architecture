@@ -33,9 +33,14 @@ services:
       - db-order:/var/lib/mysql
   auth:
     depends_on:
-      - mysqldb-auth
-      - order
-      - restaurant
+      mysqldb-auth:
+        condition: service_started
+      order:
+        condition: service_started
+      restaurant:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     build: 
       context: ./micro-authentication
       target: development
@@ -47,9 +52,12 @@ services:
       - ./logs:/root/logs
   gateway:
     depends_on:
-      - auth
-      - restaurant
-      - order
+      order:
+        condition: service_started
+      restaurant:
+        condition: service_started
+      auth:
+        condition: service_started
     build:
       context: ./micro-gateway
       target: development

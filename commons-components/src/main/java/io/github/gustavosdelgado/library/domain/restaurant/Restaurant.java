@@ -2,13 +2,7 @@ package io.github.gustavosdelgado.library.domain.restaurant;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import io.github.gustavosdelgado.library.domain.order.Order;
 import io.github.gustavosdelgado.library.domain.user.User;
@@ -23,24 +17,24 @@ import lombok.*;
 @EqualsAndHashCode(of = "id")
 public class Restaurant {
 
-    public Restaurant(String name, List<User> users) {
+    public Restaurant(String name, User user) {
         this.name = name;
-        this.users = users;
+        this.user = user;
     }
 
     @Id
+    @Column(name = "restaurant_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
     private String name;
 
-    @OneToMany
-    @Column(nullable = false)
-    private List<User> users;
+    @OneToOne(optional = false)
+    private User user;
 
-    @OneToMany
-    @Column(nullable = false)
+    @OneToMany(mappedBy = "restaurant")
+    @Column(nullable = true)
     private List<Order> orders;
 
 }

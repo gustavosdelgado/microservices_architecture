@@ -1,5 +1,6 @@
 package io.github.gustavosdelgado.microorder.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,7 +49,9 @@ public class OrderService {
             Restaurant restaurant = restaurantOptional.get();
             Order order = new Order(Long.parseLong(RandomStringUtils.randomNumeric(16)),
                     restaurant, OrderStatus.CONFIRMATION_PENDING);
-            orderRepository.save(order);
+            Optional.ofNullable(restaurant.getOrders()).orElse(new ArrayList<>()).add(order);
+
+            restaurantRepository.save(restaurant);
             rabbitTemplate.convertAndSend("order.exchange", "", order);
 
             return new OrderWebResponse(order.getOrderId(), order.getRestaurant().getId());
