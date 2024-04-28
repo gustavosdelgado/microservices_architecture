@@ -1,11 +1,9 @@
 package io.github.gustavosdelgado.microgateway.filter;
 
-import java.time.Clock;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.UUID;
-
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.JWTVerifier.BaseVerification;
+import com.auth0.jwt.algorithms.Algorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,13 +16,13 @@ import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.JWTVerifier.BaseVerification;
-import com.auth0.jwt.algorithms.Algorithm;
-
 import reactor.core.publisher.Mono;
+
+import java.time.Clock;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class GlobalFilterImpl implements GlobalFilter, Ordered {
@@ -45,9 +43,7 @@ public class GlobalFilterImpl implements GlobalFilter, Ordered {
             addRequestId(exchange);
             logger.info("Authentication request, forwarding...");
             return chain.filter(exchange)
-                    .then(Mono.fromRunnable(() -> {
-                        logger.info("Global Post Filter executed");
-                    }));
+                    .then(Mono.fromRunnable(() -> logger.info("Global Post Filter executed")));
         }
 
         if (!headers.containsKey("Authorization")) {
@@ -70,9 +66,7 @@ public class GlobalFilterImpl implements GlobalFilter, Ordered {
 
         logger.info("Global Pre Filter executed");
         return chain.filter(exchange)
-                .then(Mono.fromRunnable(() -> {
-                    logger.info("Global Post Filter executed");
-                }));
+                .then(Mono.fromRunnable(() -> logger.info("Global Post Filter executed")));
     }
 
     private void verifyAuthorizationToken(HttpHeaders headers) {

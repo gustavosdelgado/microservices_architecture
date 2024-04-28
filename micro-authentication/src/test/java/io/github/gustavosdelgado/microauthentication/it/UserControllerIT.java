@@ -1,8 +1,7 @@
 package io.github.gustavosdelgado.microauthentication.it;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import io.github.gustavosdelgado.library.domain.user.Role;
+import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,8 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
-import io.github.gustavosdelgado.library.domain.user.Role;
-import io.github.gustavosdelgado.microauthentication.domain.user.AuthenticationRequest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)

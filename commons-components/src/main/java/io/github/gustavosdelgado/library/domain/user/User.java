@@ -1,21 +1,16 @@
 package io.github.gustavosdelgado.library.domain.user;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-
-import javax.persistence.*;
-
-import io.github.gustavosdelgado.library.domain.restaurant.Restaurant;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 
 @Table(name = "users")
 @Entity(name = "User")
